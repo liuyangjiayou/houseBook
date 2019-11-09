@@ -1,0 +1,57 @@
+
+
+@import './../assets/css/common.less';
+/* 重置input样式 */
+.el-input input{
+    .bdr(0);
+    .bd(1px,solid,@e0);
+    .height(30px);
+}
+.el-input input:focus{
+    .bdc(@green);
+}
+.el-input .el-input__icon{
+    .lh(30px);
+}
+/* 重置单选框样式 */
+.el-radio__input.is-checked+.el-radio__label{
+    .c(@green);
+}
+.el-radio__input.is-checked .el-radio__inner{
+    .c(@green);
+    .bgc(@green);
+} 
+/* 重置单选样式 */
+.el-checkbox__input.is-checked+.el-checkbox__label{
+    .c(@green);
+}
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner{
+    .c(@green);
+    .bgc(@green);
+}
+/* 重置select框 */
+.el-select .el-input.is-focus .el-input__inner,.el-select-dropdown__item.selected,.time-select-item.selected:not(.disabled),.el-date-table td.today span{
+    .c(@green);
+}
+.el-select .el-input.is-focus .el-input__inner,.el-select .el-input__inner:focus{
+    .bdc(@green);
+}
+/* table表单样式重置 */
+.el-table__header tr{
+    .bgc(#fafafa);
+}
+.el-table__header tr th{
+    .ft(14px);
+    .c(#323942);
+}
+
+/* 修改分页器的样式 */
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    .bgc(@wblack);
+}
+.el-pagination.is-background .el-pager li:not(.disabled):hover{
+    .c(@wblack);
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover{
+    .c(white);
+}

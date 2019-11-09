@@ -1,0 +1,131 @@
+@import './base.css';
+@yellow : #f90;
+@green : #00ac66;
+@black : #2d3039;
+@blue : #208eff;
+@white : #fff;
+@c999 : #999999;
+@cblack : #323942;
+@wblack :#323942;
+@ccc :#cccccc;
+@c333 : #333;
+@c555 : #555;
+@c666 : #666;
+@c999 : #999;
+@ceb : #ebebeb;
+@e0 : #e0e0e0;
+@e6 : #e6e6e6;
+@a3 : #a3a4a5;
+@f0 : #f0f0f0;
+
+body{
+    // position: relative;
+    font-family: helvetica neue,arial,hiragino sans gb,stheiti,wenquanyi micro hei,\5FAE\8F6F\96C5\9ED1,\5B8B\4F53,sans-serif;
+    .c(#323942);
+    .bgc(@f0);
+    .ft(14px);
+}
+/* 这些是关于字体的样式  */
+@cter : center;
+/* margin auto */
+.marginAuto(@w,@mw){
+    width: @w;
+    margin: @mw auto;
+}
+/* margin/padding */
+.mg(@n){
+    margin: @n;
+}
+.mgl(@n){
+    margin-left: @n;
+}
+.mgr(@n){
+    margin-right: @n;
+}
+.mgt(@n){
+    margin-top: @n;
+}
+.mgb(@n){
+    margin-bottom: @n;
+}
+.pd(@n){
+    padding: @n;
+}
+.pdr(@n){
+    padding-right: @n;
+}
+.pdt(@n){
+    padding-top: @n;
+}
+.pdb(@n){
+    padding-bottom: @n;
+}
+.pdl(@n){
+    padding-left: @n;
+}
+/* 宽高 */
+.minw(@n){
+    min-width: @n;
+}
+.w(@n){
+    width: @n;
+}
+.minh(@n){
+    min-height: @n;
+}
+.h(@n){
+    height: @n;
+}
+.lh(@n){
+    line-height: @n;
+}
+.height(@n){
+    height: @n;
+    line-height: @n;
+}
+/* 字体 */
+.c(@n){
+    color: @n;
+}
+.ft(@n){
+    font-size: @n,
+}
+.fw(@n){
+    font-weight: @n,
+}
+/* 背景 */
+.bgc(@n){
+    background-color: @n;
+}
+.bgi(@n){
+    background: url('../images/icon.png') @n no-repeat;
+}
+/* border */
+.bdr(@n){
+    border-radius: @n;
+}
+.bd(@n,@s,@c){
+    border: 1px @s @c
+}
+.bdn(){
+    border: none;
+}
+.bdbx(@n,@s,@c){
+    border-bottom: 1px @s @c
+}
+.bdc(@n){
+    border-color: @n;
+}
+/* main */
+.main{
+    margin: 0 auto;
+    width: 1200px;
+}
+/* 重置原生input */
+input{
+    outline: none;
+    .bd(1px,solid,@e6);
+}
+input:focus{
+    .bd(1px,solid,@green);
+}
