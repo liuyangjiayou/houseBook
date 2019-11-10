@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import { resolve } from 'url';
-
 Vue.use(VueRouter)
 
 const routes = [
     {
         path : '/',
-        redirect : '/buyHouseLoan'
+        redirect : '/home'
     },
     {
         path : '/home',
@@ -29,10 +27,32 @@ const routes = [
     {
         path : '/houseCard',
         name : 'houseCard',
-        component: () => import('../views/HouseCard.vue'),
+        component: () => import('../views/HouseCard/HouseCardIndex.vue'),
         meta : {
-            title : '房本管理'
-        }
+            title : '房本'
+        },
+        children : [
+            {
+                path : '/houseCard/list',
+                name : 'houseCard-list',
+                component : () => import('../views/HouseCard/HouseCardList.vue'),
+                meta : {
+                    title : '房本列表'
+                },
+            },
+            {
+                path : '/houseCard/details',
+                name : 'houseCard-details',
+                component : () => import('../views/HouseCard/HouseCardDetails.vue'),
+                meta : {
+                    title : '房本详情'
+                },
+            },
+            {
+                path : '/houseCard',
+                redirect : '/houseCard/list'
+            }
+        ],
     },
     {
         path: '/about',

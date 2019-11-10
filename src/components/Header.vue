@@ -138,7 +138,8 @@
             }
         }
     }
-    .router-link-exact-active{
+    // .router-link-exact-active{.bgc(@yellow);} 精准匹配
+    .router-link-active{
         .bgc(@yellow);
     }
 </style>

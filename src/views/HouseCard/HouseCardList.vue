@@ -1,10 +1,6 @@
 <template>
     <div class="">
         <!-- 房本管理 -->
-        <Header></Header>
-        <div class="main">
-            <Breadcrumb></Breadcrumb>
-        </div>
         <div class="main">
             <TopNavList></TopNavList>
         </div>
@@ -13,7 +9,7 @@
         </div>
         <div class="table-list-box main">
             <el-table :data="tableData" style="width:100%">
-                <el-table-column label="序号" type="index" width="84" align="center" :index="index"></el-table-column>
+                <el-table-column label="序号" type="index" width="84" align="center"></el-table-column>
                 <el-table-column label="产权人" width="120">
                     <template slot-scope="scope">
                         {{scope.row.name}}
@@ -41,10 +37,10 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text">详情</el-button>
+                        <el-button type="text" @click="goDetails(scope.row.id)">详情</el-button>
                         <el-button type="text">编辑</el-button>
                         <el-button type="text">二维码</el-button>
-                        <el-button type="text">添加流转记录</el-button>
+                        <el-button type="text" @click="addTurn(scope.row.id)">添加流转记录</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,15 +57,11 @@
 </template>
 
 <script>
-import Header from '../components/Header'
-import Breadcrumb from '../components/Breadcrumb'
-import TopNavList from '../components/TopNavList'
-import ListTopArr from '../components/ListTopArr'
-import Footer from '../components/Footer'
+import TopNavList from '../../components/TopNavList'
+import ListTopArr from '../../components/ListTopArr'
+import Footer from '../../components/Footer'
 export default {
     components: {
-        Header,
-        Breadcrumb,
         TopNavList,
         ListTopArr,
         Footer
@@ -141,7 +133,14 @@ export default {
     },
     computed: {},
     watch: {},
-    methods: {},
+    methods: {
+        goDetails(id){
+            this.$router.push({ path: '/houseCard/details'});
+        },
+        addTurn(id){
+            
+        }
+    },
     created() {},
     mounted() {},
     beforeCreate() {},
@@ -154,7 +153,7 @@ export default {
     }
 </script>
 <style lang='less' scoped>
-@import url('../assets/css/common.less');
+@import url('../../assets/css/common.less');
 .table-list-box{.mgb(46px);.pdb(37px);.bgc(@white)}
 .page-box{.pdt(37px);text-align: center;}
 

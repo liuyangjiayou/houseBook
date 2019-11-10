@@ -28,6 +28,9 @@ a{
 .dib2{
     display: inline-block;
 }
+.vtat{
+    vertical-align: top;
+}
 .dn{
     display: none;
 }

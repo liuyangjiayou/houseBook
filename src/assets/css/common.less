@@ -93,6 +93,15 @@ body{
 .fw(@n){
     font-weight: @n,
 }
+.cblue{
+    color: @blue;
+}
+.cgreen{
+    color: @green;
+}
+.c6{
+    color: @c666;
+}
 /* 背景 */
 .bgc(@n){
     background-color: @n;
@@ -105,13 +114,16 @@ body{
     border-radius: @n;
 }
 .bd(@n,@s,@c){
-    border: 1px @s @c
+    border: @n @s @c
 }
 .bdn(){
     border: none;
 }
 .bdbx(@n,@s,@c){
-    border-bottom: 1px @s @c
+    border-bottom: @n @s @c
+}
+.bdlx(@n,@s,@c){
+    border-left: @n @s @c
 }
 .bdc(@n){
     border-color: @n;
