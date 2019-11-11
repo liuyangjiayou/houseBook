@@ -1,135 +1,139 @@
 <template>
-  <div class="main">
-    <!-- 房本管理详情 -->
-    <div class="house-card-info">
-      <h6><span class="l title">房本信息</span></h6>
-      <div class="house-card-wrap">
-        <ul class="ul1 ovh">
-          <li class="l li1">
-            <strong>房产证号：</strong>
-            <span class="cblue">132586954</span>
-          </li>
-          <li class="l li1">
-            <strong>产权人：</strong>
-            <span class="cblue">李树杰</span>
-          </li>
-          <li class="l">
-            <strong>房产证类型：</strong>
-            <span class="cblue">市政</span>
-          </li>
-        </ul>
-        <ul class="ul1">
-          <li class="l li1">
-            <strong>是否共有：</strong>
-            <span class="cblue">否</span>
-          </li>
-          <li class="l li1">
-            <strong>有无公证书：</strong>
-            <span class="cblue">无</span>
-          </li>
-          <li class="l">
-            <strong>房产证地址：</strong>
-            <span class="cblue">新华区新华路987号6-5-412</span>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <strong>房产证地址：</strong>
-            <span class="cblue">房本地址与房屋实际地址不一致</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- 房本流传信息 -->
-    <div class="house-card-turn">
-      <h6>
-        <span class="l title">房本流转信息</span>
-        <ul class="l">
-          <li class="l">
-            时间<i></i>
-          </li>
-        </ul>
-      </h6>
-      <div class="house-turn-wrap">
-        <ul>
-          <li>
-            <div class="cicon"></div>
-            <div class="dib2 vtat img-box"></div>
-            <div class="dib2 vtat">
-              <p>
-                <span class="mg10px">刘明玉</span>
-                <span class="mg10px">永佳西里A店</span>
-                <span>2019.09.26 12:25</span>
-              </p>
-              <p>
-                <strong class="cblue mg10px">录入</strong>
-                <span>收本原因：<span class="cblue">网签</span></span>
-              </p>
-              <p>
-                <span class="c6">持本时长：</span><span>4小时</span>
-              </p>
-              <p>备注：这里是备注内容</p>
-              <p>
-                <span class="dib2">收本凭证</span>
-                <img class="dib2" src="" alt="">
-              </p>
+<div>
+    <div class="main">
+        <!-- 房本管理详情 -->
+        <div class="house-card-info">
+            <h6><span class="l title">房本信息</span></h6>
+            <div class="house-card-wrap">
+                <ul class="ul1 ovh">
+                    <li class="l li1">
+                        <strong>房产证号：</strong>
+                        <span class="cblue">132586954</span>
+                    </li>
+                    <li class="l li1">
+                        <strong>产权人：</strong>
+                        <span class="cblue">李树杰</span>
+                    </li>
+                    <li class="l">
+                        <strong>房产证类型：</strong>
+                        <span class="cblue">市政</span>
+                    </li>
+                </ul>
+                <ul class="ul1">
+                    <li class="l li1">
+                        <strong>是否共有：</strong>
+                        <span class="cblue">否</span>
+                    </li>
+                    <li class="l li1">
+                        <strong>有无公证书：</strong>
+                        <span class="cblue">无</span>
+                    </li>
+                    <li class="l">
+                        <strong>房产证地址：</strong>
+                        <span class="cblue">新华区新华路987号6-5-412</span>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <strong>房产证地址：</strong>
+                        <span class="cblue">房本地址与房屋实际地址不一致</span>
+                    </li>
+                </ul>
             </div>
-          </li>
-          <li>
-            <div class="cicon"></div>
-            <div class="dib2 vtat img-box"></div>
-            <div class="dib2 vtat">
-              <p>
-                <span class="mg10px">刘明玉</span>
-                <span class="mg10px">永佳西里A店</span>
-                <span>2019.09.26 12:25</span>
-              </p>
-              <p>
-                <strong class="cblue mg10px">录入</strong>
-                <span>收本原因：<span class="cblue">网签</span></span>
-              </p>
-              <p>
-                <span class="c6">持本时长：</span><span>4小时</span>
-              </p>
-              <p>备注：这里是备注内容</p>
-              <p>
-                <span class="dib2">收本凭证</span>
-                <img class="dib2" src="" alt="">
-              </p>
+        </div>
+            <!-- 房本流传信息 -->
+        <div class="house-card-turn ovh">
+            <h6>
+                <span class="l title">房本流转信息</span>
+                <ul class="l">
+                <li class="l">
+                    时间<i></i>
+                </li>
+                </ul>
+            </h6>
+            <div class="house-turn-wrap">
+                <ul>
+                    <li>
+                        <div class="cicon"></div>
+                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+                        <div class="dib2 vtat">
+                        <p>
+                            <span class="mg10px">刘明玉</span>
+                            <span class="mg10px">永佳西里A店</span>
+                            <span>2019.09.26 12:25</span>
+                        </p>
+                        <p>
+                            <strong class="cblue mg10px">录入</strong>
+                            <span>收本原因：<span class="cblue">网签</span></span>
+                        </p>
+                        <p>
+                            <span class="c6">持本时长：</span><span>4小时</span>
+                        </p>
+                        <p>备注：这里是备注内容</p>
+                        <p>
+                            <span class="dib2">收本凭证</span>
+                            <img class="dib2" src="" alt="">
+                        </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cicon"></div>
+                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+                        <div class="dib2 vtat">
+                        <p>
+                            <span class="mg10px">刘明玉</span>
+                            <span class="mg10px">永佳西里A店</span>
+                            <span>2019.09.26 12:25</span>
+                        </p>
+                        <p>
+                            <strong class="cblue mg10px">录入</strong>
+                            <span>收本原因：<span class="cblue">网签</span></span>
+                        </p>
+                        <p>
+                            <span class="c6">持本时长：</span><span>4小时</span>
+                        </p>
+                        <p>备注：这里是备注内容</p>
+                        <p>
+                            <span class="dib2">收本凭证</span>
+                            <img class="dib2" src="" alt="">
+                        </p>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="cicon"></div>
+                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+                        <div class="dib2 vtat">
+                        <p>
+                            <span class="mg10px">刘明玉</span>
+                            <span class="mg10px">永佳西里A店</span>
+                            <span>2019.09.26 12:25</span>
+                        </p>
+                        <p>
+                            <strong class="cblue mg10px">录入</strong>
+                            <span>收本原因：<span class="cblue">网签</span></span>
+                        </p>
+                        <p>
+                            <span class="c6">持本时长：</span><span>4小时</span>
+                        </p>
+                        <p>备注：这里是备注内容</p>
+                        <p>
+                            <span class="dib2">收本凭证</span>
+                            <img class="dib2" src="" alt="">
+                        </p>
+                        </div>
+                    </li>
+                </ul>
             </div>
-          </li>
-          <li>
-            <div class="cicon"></div>
-            <div class="dib2 vtat img-box"></div>
-            <div class="dib2 vtat">
-              <p>
-                <span class="mg10px">刘明玉</span>
-                <span class="mg10px">永佳西里A店</span>
-                <span>2019.09.26 12:25</span>
-              </p>
-              <p>
-                <strong class="cblue mg10px">录入</strong>
-                <span>收本原因：<span class="cblue">网签</span></span>
-              </p>
-              <p>
-                <span class="c6">持本时长：</span><span>4小时</span>
-              </p>
-              <p>备注：这里是备注内容</p>
-              <p>
-                <span class="dib2">收本凭证</span>
-                <img class="dib2" src="" alt="">
-              </p>
-            </div>
-          </li>
-        </ul>
-      </div>
+            <ListErrBox></ListErrBox>
+        </div>
     </div>
     <Footer></Footer>
-  </div>
+</div>
 </template>
 
 <script>
 import Footer from '../../components/Footer'
+import ListErrBox from '../../components/ListErrBox'
   export default {
     name:'',
     props:[''],
@@ -139,7 +143,10 @@ import Footer from '../../components/Footer'
       };
     },
 
-    components: {Footer},
+    components: {
+        Footer,
+        ListErrBox
+    },
 
     computed: {},
 
@@ -193,7 +200,6 @@ import Footer from '../../components/Footer'
         .w(50px);
         .h(50px);
         .bdr(50%);
-        .bgc(red);
       }
       .mg10px{
         .mgr(10px);

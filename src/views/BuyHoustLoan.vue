@@ -5,7 +5,9 @@
         <div class="main">
             <Breadcrumb></Breadcrumb>
         </div>
-        购房贷款页面
+        <div class="main">
+            购房贷款页面
+        </div>
     </div>
 </template>
 

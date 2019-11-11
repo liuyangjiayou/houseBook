@@ -55,9 +55,9 @@ const routes = [
         ],
     },
     {
-        path: '/about',
-        name: 'about',
-        component: () => import('../views/About.vue'),
+        path: '/test',
+        name: 'test',
+        component: () => import('../views/test.vue'),
         meta : {
             title : '第二个页'
         }

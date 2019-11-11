@@ -1,18 +1,53 @@
 
 
 @import './../assets/css/common.less';
+/* 重置按钮样式 */
+
+.el-button--primary,.el-message-box__btns .el-button--primary{
+    .pd(10px 25px);
+    .bgc(@green);
+    .bd(1px,solid,@green);
+    .bdr(0);
+    .c(@white);
+}
+.el-button--primary:hover,.el-button--primary:focus,.el-message-box__btns .el-button--primary:hover,.el-message-box__btns .el-button--primary:focus{
+    .bgc(@green);
+    .bd(1px,solid,@green);
+    .c(@white);
+}
+.el-button--default{
+    .pd(10px 25px);
+    .bgc(@white);
+    .bd(1px,solid,@c999);
+    .bdr(0);
+    .c(@c555);
+}
+.el-button--default:hover{
+    .bgc(@white);
+    .bd(1px,solid,@c999);
+    .c(@c555);
+}
+.el-button--text{
+    padding: 0;
+}
 /* 重置input样式 */
 .el-input input{
     .bdr(0);
-    .bd(1px,solid,@e0);
-    .height(30px);
+    .bd(1px,solid,@b8);
+    .height(36px);
 }
-.el-input input:focus{
+.el-input input:focus,.el-textarea__inner:focus{
     .bdc(@green);
 }
 .el-input .el-input__icon{
-    .lh(30px);
+    .lh(36px);
 }
+.el-textarea__inner{
+    .bdr(0);
+    .bd(1px,solid,@b8);
+}
+
+
 /* 重置单选框样式 */
 .el-radio__input.is-checked+.el-radio__label{
     .c(@green);
@@ -30,12 +65,34 @@
     .bgc(@green);
 }
 /* 重置select框 */
-.el-select .el-input.is-focus .el-input__inner,.el-select-dropdown__item.selected,.time-select-item.selected:not(.disabled),.el-date-table td.today span{
-    .c(@green);
-}
+// .el-select .el-input.is-focus .el-input__inner,.el-select-dropdown__item.selected,.time-select-item.selected:not(.disabled),.el-date-table td.today span{
+//     .c(@green);
+// }
 .el-select .el-input.is-focus .el-input__inner,.el-select .el-input__inner:focus{
     .bdc(@green);
 }
+.el-select__tags .el-select__input:focus{
+    .bdc(@white);
+}
+//修改下拉弹窗的样式
+.el-select-dropdown,.el-popper{
+    .mg(0);
+    .bdr(0);
+    box-shadow: none;
+}
+.el-popper[x-placement^=bottom]{
+    .mg(0);
+}
+.el-popper[x-placement^=bottom] .popper__arrow{
+    display: none;
+}
+//修改滚动条
+// .el-scrollbar__bar.is-vertical .el-scrollbar__thumb{
+//     .bdr(0);
+//     .bgc(@c999);
+//     .w(13px);
+// }
+
 /* table表单样式重置 */
 .el-table__header tr{
     .bgc(#fafafa);
@@ -54,4 +111,28 @@
 }
 .el-pagination.is-background .el-pager li:not(.disabled).active:hover{
     .c(white);
+}
+
+
+/* 重置弹窗样式 */
+//底部按钮为居中显示
+.dialog-footer-center .el-dialog__footer{
+    text-align: center;
+}
+.el-dialog{
+    display: flex;
+    flex-direction: column;
+    margin:0 !important;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    /*height:600px;*/
+    max-height:calc(100% - 30px);
+    max-width:calc(100% - 30px);
+}
+.el-dialog .el-dialog__body{
+    .pd(20px);
+    flex:1;
+    overflow: auto;
 }
