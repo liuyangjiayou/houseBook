@@ -65,22 +65,21 @@
         </div>
         <!-- 添加流转记录弹窗 -->
         <el-dialog class="dialog-footer-center" title="添加流转记录" :visible.sync="dialogAddTurn" width="720px">
-            <el-form label-width="108px" :model="formData">
-                <el-form-item label="流转类型">
-                    <el-select style="width: 418px" v-model="formData.region" placeholder="选择流转类型">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
+            <el-form label-width="108px" :rules="rules" ref="dialogAddTurn" :model="formData">
+                <el-form-item label="流转类型" prop="turnID">
+                    <el-select style="width: 418px" v-model="formData.turnID" placeholder="选择流转类型">
+                        <el-option v-for="(item,index) in formData.turnOption" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="收本原因">
-                    <el-select style="width: 418px" v-model="formData.region2" placeholder="选择收本原因">
-                        <el-option label="我是收本原因" value="123"></el-option>
+                <el-form-item label="收本原因" prop="cause">
+                    <el-select style="width: 418px" v-model="formData.cause" placeholder="选择收本原因">
+                        <el-option v-for="(item,index) in formData.causeList" :key="index" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="系统号">
+                <el-form-item label="系统号" prop="value9">
                     <el-select
                         style="width: 418px" 
-                        v-model="value9"
+                        v-model="formData.value9"
                         filterable
                         remote
                         placeholder="请输入关键词"
@@ -94,7 +93,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="备注">
+                <el-form-item label="备注" prop="textarea">
                     <el-input
                         style="width: 418px"
                         type="textarea"
@@ -109,7 +108,7 @@
             </el-form>
             <span slot="footer" class="">
                 <el-button type="primary" @click="dialogAddTurn = false">保存</el-button>
-                <el-button @click="dialogAddTurn = false">取消</el-button>
+                <el-button @click="()=>{this.dialogAddTurn = false;this.resetForm('dialogAddTurn')}">取消</el-button>
             </span>
         </el-dialog>
         <Footer></Footer>
@@ -191,7 +190,22 @@ export default {
             }],
             dialogAddTurn : false,
             formData: {
-                name: '',
+                turnID : '',
+                turnOption : [
+                    {value : 1 ,label : '流转类型一'},
+                    {value : 2 ,label : '流转类型二'},
+                    {value : 3 ,label : '流转类型三'},
+                    {value : 4 ,label : '流转类型四'},
+                    {value : 5 ,label : '流转类型五'},
+                ],
+                cause : '',
+                causeList : [
+                    {value : 1 ,label : '收本原因一'},
+                    {value : 2 ,label : '收本原因二'},
+                    {value : 3 ,label : '收本原因三'},
+                    {value : 4 ,label : '收本原因四'},
+                    {value : 5 ,label : '收本原因五'},
+                ],
                 region: '',
                 region2: '',
                 date1: '',
@@ -200,7 +214,8 @@ export default {
                 type: [],
                 resource: '',
                 desc: '',
-                textarea : "填写备注"
+                textarea : "",
+                value9 : []
             },
             options4: [],
             value9: [],
@@ -223,6 +238,21 @@ export default {
             "Utah", "Vermont", "Virginia",
             "Washington", "West Virginia", "Wisconsin",
             "Wyoming"],
+
+            rules : {
+                turnID: [
+                    { required: true, message: '请选择流转类型', trigger: 'change' }
+                ],
+                cause: [
+                    { required: true, message: '请选择收本原因', trigger: 'change' }
+                ],
+                value9 :[
+                    {required : true, message : '请选择系统号', trigger: 'blur'}
+                ],
+                textarea: [
+                    {required : true, message : '请填写备注信息', trigger: 'blur'}
+                ],
+            }
         };
     },
     computed: {},
@@ -248,7 +278,9 @@ export default {
             this.options4 = [];
             }
         },
-        
+        resetForm(formName) {
+            this.$refs[formName].resetFields()
+        }
     },
     created() {},
     mounted() {

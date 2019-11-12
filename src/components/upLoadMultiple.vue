@@ -72,13 +72,6 @@ export default {
                
             })
         },
-        handlePictureCardPreview(file) {
-            this.dialogImageUrl = file.url;
-            this.dialogVisible = true;
-        },
-        handleDownload(file) {
-            console.log(file);
-        },
         handleExceed(files, fileList){
             /* 文件超出个数限制时的时候 */
             this.$confirm(`你好，最多可以上传${this.limit}张图片`, '信息', {
@@ -87,10 +80,26 @@ export default {
                 type: 'warning'
             });
         },
-
+        handlePictureCardPreview(file) {
+            this.dialogImageUrl = file.url;
+            this.dialogVisible = true;
+        },
+        handleDownload(file) {
+            console.log(file);
+        },
         addFile(file,fileList){
             /* 添加文件 */
-            this.fileList.push(file);
+            // if(this.fileList.some(item => item.name == file.name)){
+            //     this.fileList = this.fileList.filter(item => item.name != file.name);
+            //     this.$confirm(`你好，此图片已被选择了请勿重复添加`, '信息', {
+            //         confirmButtonText: '确定',
+            //         cancelButtonText: '取消',
+            //         type: 'warning'
+            //     });
+            //     return false
+            // }else{
+            //     this.fileList.push(file);
+            // }
         }
     },
     created() {},
