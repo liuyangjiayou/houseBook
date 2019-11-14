@@ -17,6 +17,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Breadcrumb from '../components/Breadcrumb'
 import Info from '../pageComponents/Home/Info'
+import { post } from '../api/api.js'
 export default {
     components: {
         Header,
@@ -33,7 +34,11 @@ export default {
     watch: {},
     methods: {},
     created() {},
-    mounted() {},
+    mounted() {
+        post('/index/index/index').then((res)=>{
+            console.log(res);
+        });
+    },
     beforeCreate() {},
     beforeMount() {},
     beforeUpdate() {},

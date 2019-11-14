@@ -88,18 +88,18 @@ export default {
             console.log(file);
         },
         addFile(file,fileList){
-            /* 添加文件 */
-            // if(this.fileList.some(item => item.name == file.name)){
-            //     this.fileList = this.fileList.filter(item => item.name != file.name);
-            //     this.$confirm(`你好，此图片已被选择了请勿重复添加`, '信息', {
-            //         confirmButtonText: '确定',
-            //         cancelButtonText: '取消',
-            //         type: 'warning'
-            //     });
-            //     return false
-            // }else{
-            //     this.fileList.push(file);
-            // }
+           /* 添加文件 */
+            if(this.fileList.some((item)=>item.name == file.name)){
+                this.fileList = fileList.filter((item)=>item.uid !== file.uid);
+                this.$confirm(`你好，这张图片已经被添加过了`, '信息', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                });
+                return false
+            }else{
+                this.fileList.push(file);
+            }
         }
     },
     created() {},

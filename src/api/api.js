@@ -1,9 +1,9 @@
 import axios from 'axios'
 import qs from  'qs'
 import Vue from 'vue';
-// axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'http://localhost:8080/api';
 // axios.defaults.baseURL = 'http://zhaofang.ok.wang/index/index/httprequest';
-axios.defaults.baseURL = "http://newhr.t.ok.wang"
+// axios.defaults.baseURL = "https://newhr.t.ok.wang/api"
 
 //发送请求的时候的一个拦截器
 axios.interceptors.request.use(function (config) {
@@ -21,11 +21,12 @@ axios.interceptors.request.use(function (config) {
 
 //接受响应的一个拦截器
 axios.interceptors.response.use(function (res) {
+    console.log(res.data.data.url);
+    if(res.errcode == 4002){window.location.href = res.data.data.url;return false;};
 
-    
-  return res.data
+    return res.data
 },function (err) {
-  return Promise.reject(err);
+    return Promise.reject(err);
 });
 
 

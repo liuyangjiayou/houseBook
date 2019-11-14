@@ -5,7 +5,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://newhr.t.ok.wang',
+                target: 'http://ts.local.esez.cn:8080',
                 changeOrigin: true
             }
         }
