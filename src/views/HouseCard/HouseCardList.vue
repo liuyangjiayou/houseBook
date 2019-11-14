@@ -4,13 +4,13 @@
 
         <div class="main">
             <!-- 测试封装上传图片 -->
-                <uploadMultiple></uploadMultiple>
+                <!-- <uploadMultiple></uploadMultiple> -->
             <!-- end -->
         </div>
 
         <!-- 房本管理 -->
         <div class="main">
-            <TopNavList></TopNavList>
+            <TopNavList :listData="navList"></TopNavList>
         </div>
         <div class="main">
             <ListTopArr></ListTopArr>
@@ -131,6 +131,11 @@ export default {
     },
     data() {
         return {
+            navList : [
+                {title : '房本类型',list : [{title : '不限',id : 'a0'},{title : '市证',id : 'a1'},{title : '村证',id : 'a2'},{title : '其他',id : 'a3'}]},
+                {title : '业务类型',list : [{title : '不限',id : 'b0'},{title : '买卖成交',id : 'b1'},{title : 'VIP',id : 'b2'},{title : '二手房新出本',id : 'b3'},{title : '抵押贷款',id : 'b4'}]},
+                {title : '房本状态',list : [{title : '不限',id : 'c0'},{title : '录入',id : 'c1'},{title : '收本',id : 'c2'},{title : '业主取走',id : 'c3'}]},
+            ],
             tableData : [{
                 id : 1,
                 houseCardType : '市证',

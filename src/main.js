@@ -5,7 +5,10 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import './static/resetElement.less'
-Vue.use(ElementUI)
+import Dom from './dom/index'
+
+Vue.use(ElementUI);
+Vue.use(Dom);
 Vue.config.productionTip = false
 
 new Vue({

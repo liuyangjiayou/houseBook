@@ -5,13 +5,10 @@
             <input type="text" class="keyword-input" placeholder="输入产权人姓名">
             <span class="button dib2">搜索</span>
         </div>
-        <div class="nav-box">
-            <p class="dib2">房本类型：</p>
+        <div class="nav-box" v-for="(list,index) in listData" :key="index">
+            <p class="dib2">{{list.title}}：</p>
             <ul class="dib2">
-                <li class="dib2">不限</li>
-                <li class="dib2">市证</li>
-                <li class="dib2">村证</li>
-                <li class="dib2">其他</li>
+                <li v-for="(item,index) in list.list" :key="index" class="dib2" @click="change($event)"><span>ads</span>{{item.title}}</li>
             </ul>
         </div>
         <div class="nav-result-box">
@@ -28,6 +25,12 @@
 
 export default {
     components: {},
+    props : {
+        listData : {
+            type : Array,
+            default : [],
+        }
+    },
     data() {
         return {
 
@@ -35,7 +38,14 @@ export default {
     },
     computed: {},
     watch: {},
-    methods: {},
+    methods: {
+        change(event){
+            this.$siblings(event.currentTarget).forEach(item => {
+                item.className = 'dib2';
+            });
+            event.currentTarget.className = this.$hasClass(event.currentTarget,'active') ? "dib2" : 'dib2 active';
+        },
+    },
     created() {},
     mounted() {},
     beforeCreate() {},
