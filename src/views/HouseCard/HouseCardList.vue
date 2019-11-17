@@ -10,7 +10,26 @@
 
         <!-- 房本管理 -->
         <div class="main">
-            <TopNavList :listData="navList"></TopNavList>
+             <div class="nav-wrap">
+                <!-- table列表上面的Nav导航 -->
+                <div>
+                    <input type="text" class="keyword-input" placeholder="输入产权人姓名">
+                    <span class="button dib2">搜索</span>
+                </div>
+                <div class="nav-box" v-for="(v1,i1) in navList" :key="i1">
+                    <p class="dib2">{{v1.title}}：</p>
+                    <ul class="dib2">
+                        <li v-for="(v2,i2) in v1.list" :key="i2" :id="v2.id" class="dib2" @click="navChangeRadioFn($event,v2,i2)">{{v2.title}}</li>
+                    </ul>
+                </div>
+                <div v-show="navResultList.length > 0" class="nav-result-box">
+                    <p>已选：</p>
+                    <ul>
+                        <li v-for="(item,index) in navResultList" :key="index" class="dib2">{{item.title}}<span @click="removeNavFn(item)"><i></i></span></li>
+                        <li class="dib2 last-li" @click="clearNavFn"><i></i>清空已选</li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <div class="main">
             <ListTopArr></ListTopArr>
@@ -46,7 +65,7 @@
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
                         <el-button type="text" @click="goDetails(scope.row.id)">详情</el-button>
-                        <el-button type="text">编辑</el-button>
+                        <el-button type="text" @click="editHouseCart(scope.row.id)">编辑</el-button>
                         <el-button type="text">二维码</el-button>
                         <el-button type="text" @click="addTurn(scope.row.id)">添加流转记录</el-button>
                     </template>
@@ -103,13 +122,38 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item label="收本凭证">
-                    <uploadMultiple></uploadMultiple>
+                    <uploadMultiple ref="aaa"></uploadMultiple>
+                    <el-input type="hidden" v-model="formData.fileList"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="">
                 <el-button type="primary" @click="dialogAddTurn = false">保存</el-button>
                 <el-button @click="()=>{this.dialogAddTurn = false;this.resetForm('dialogAddTurn')}">取消</el-button>
             </span>
+        </el-dialog>
+        <!-- 编辑房本 -->
+        <el-dialog title="编辑房本" :visible.sync="dialogEdit" width="720px">
+                <el-form ref="dialogAddEdit">
+                    <el-row>
+                        <el-col :span="10">
+                            <el-form-item label="房产证号">
+                                
+                            </el-form-item>
+                        </el-col >
+                        <el-col :span="10">
+                            <el-form-item label="房产证类型">
+                                
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    
+                     
+                    
+                </el-form>
+                <span slot="footer" class="">
+                    <el-button type="primary" @click="dialogEdit = false">保存</el-button>
+                    <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
+                </span>
         </el-dialog>
         <Footer></Footer>
     </div>
@@ -121,6 +165,7 @@ import ListTopArr from '../../components/ListTopArr'
 import ListErrBox from '../../components/ListErrBox'
 import Footer from '../../components/Footer'
 import uploadMultiple from '../../components/upLoadMultiple'
+import { nextTick } from 'q'
 export default {
     components: {
         TopNavList,
@@ -131,6 +176,7 @@ export default {
     },
     data() {
         return {
+            navResultList : [],
             navList : [
                 {title : '房本类型',list : [{title : '不限',id : 'a0'},{title : '市证',id : 'a1'},{title : '村证',id : 'a2'},{title : '其他',id : 'a3'}]},
                 {title : '业务类型',list : [{title : '不限',id : 'b0'},{title : '买卖成交',id : 'b1'},{title : 'VIP',id : 'b2'},{title : '二手房新出本',id : 'b3'},{title : '抵押贷款',id : 'b4'}]},
@@ -194,6 +240,7 @@ export default {
                 status : '录入'
             }],
             dialogAddTurn : false,
+            dialogEdit : false,
             formData: {
                 turnID : '',
                 turnOption : [
@@ -220,7 +267,8 @@ export default {
                 resource: '',
                 desc: '',
                 textarea : "",
-                value9 : []
+                value9 : [],
+                fileList : "",
             },
             options4: [],
             value9: [],
@@ -283,8 +331,39 @@ export default {
             this.options4 = [];
             }
         },
+        /* 编辑房本 */
+        editHouseCart(id){
+            this.dialogEdit = true;
+        },
         resetForm(formName) {
-            this.$refs[formName].resetFields()
+            this.$refs[formName].resetFields();
+            this.$refs.aaa.updata.clearFiles();
+        },
+        /* 当点击Nav导航单选的时候 */
+        navChangeRadioFn(e,v,i){
+            let that = this;
+            let ele = e.currentTarget;
+            let sbi = that.$siblings(ele);
+            if(that.$hasClass(ele,'active') && i == 0){return false};
+            sbi.forEach(item1 => {
+                let id = item1.getAttribute('id');
+                item1.className = 'dib2';
+                that.navResultList = that.navResultList.filter(item2 => item2.id != id);
+            });
+            if(i != 0 && that.$hasClass(ele,'active')){
+                that.navResultList = that.navResultList.filter(item2 => item2.id != v.id);
+            }else{
+                i != 0 ? that.navResultList.push(v) : null;
+            }
+            ele.className = that.$hasClass(ele,'active') ? 'dib2' : 'dib2 active';
+        },
+        /* 删除某一项数据 */
+        removeNavFn(v){
+            this.navResultList = this.navResultList.filter(item => item.id != v.id);
+        },
+        /* 清除数据 */
+        clearNavFn(){
+            this.navResultList = [];
         }
     },
     created() {},
@@ -292,6 +371,7 @@ export default {
         this.list = this.states.map(item => {
             return { value: item, label: item };
         });
+        
     },
     beforeCreate() {},
     beforeMount() {},
@@ -306,5 +386,120 @@ export default {
 @import url('../../assets/css/common.less');
 .table-list-box{.mgb(46px);.pdb(37px);.bgc(@white)}
 .page-box{.pdt(37px);text-align: center;}
+.nav-wrap{
+    box-sizing: border-box;
+    .pd(20px);
+    .w(100%);
+    .bd(1px,solid,@e6);
+    .bgc(@white);
+    .button{
+        .w(90px);
+        .height(40px);
+        text-align: center;
+        .c(@white);
+        .bdr(3px);
+        .bgc(@green);
+        .bdn();
+        cursor: pointer;
+    }
+    .keyword-input{
+        box-sizing: border-box;
+        .mgr(20px);
+        .pd(0 10px);
+        .w(300px);
+        .bdr(3px);
+        .height(40px);
+    }
+    .button:hover{
+        opacity: .9;
+    }
+}
+.nav-box{
+    position: relative;
+    .pdl(76px);
+    p{
+        position: absolute;
+        top: 0;
+        left: 0;
+        .height(48px);
+    }
+    ul{
+        
+        .pd(14px 0 12px 0);
+        .h(22px);
+        li{
+            .pd(0 12px);
+            cursor: pointer;
+        }
+        li:hover{
+            .c(@green);
+        }
+        li.active{
+            .c(@green);
+        };
+    }
+}
+.nav-result-box{
+    position: relative;
+    .pdl(68px);
+    .minh(48px);
+    p{
+        position: absolute;
+        top: 0;
+        left: 0;
+        .height(48px);
+    }
+    ul{
+        .pd(10px 0 12px 0);
+        .lh(22px);
+        li{
+            position: relative;
+            cursor: pointer;
+            .mgr(10px);
+            .mgb(2px);
+            .pd(0 38px 0 8px);
+            .height(26px);
+            .bd(1px,solid,@green);
+            span{
+                position: absolute;
+                top: 0;
+                right: 0;
+                .w(30px);
+                .h(26px);
+                .bgc(@green);
+                i{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                    .w(10px);
+                    .h(9px);
+                    .bgi(-42px 0);
 
+                }
+            }
+        }
+        li.last-li{
+            .mg(0 0 0 19px);
+            .pdl(22px);
+            .bdn();
+            i{
+                position: absolute;
+                top: 6px;
+                left: 0;
+                .w(14px);
+                .h(14px);
+                .bgi(-55px 0);
+            }
+        }
+        li:hover{
+            .c(@green);
+        }
+        li.active{
+            .c(@green);
+        };
+    }
+}
 </style>

@@ -9,11 +9,13 @@
             action="#"
             accept="image/jpeg,image/gif,image/png"
             multiple
+            ref="updata"
             list-type="picture-card"
             :limit="limit"
             :file-list="fileList"
             :on-exceed="handleExceed"
             :on-change="addFile"	
+         
             :auto-upload="false">
             <!-- 按钮的背景图 -->
             <i slot="default" class="liu-icon"></i>
@@ -48,13 +50,17 @@
 
 export default {
     components: {},
+    props : {
+        
+    },
     data() {
         return {
             dialogImageUrl: '',
             dialogVisible: false,
             disabled: false,
-            fileList : [],
             limit : 3,
+            fileList : [],
+            updata : '',
         };
     },
     computed: {},
@@ -85,25 +91,22 @@ export default {
             this.dialogVisible = true;
         },
         handleDownload(file) {
-            console.log(file);
+            
         },
         addFile(file,fileList){
-           /* 添加文件 */
-            if(this.fileList.some((item)=>item.name == file.name)){
-                this.fileList = fileList.filter((item)=>item.uid !== file.uid);
-                this.$confirm(`你好，这张图片已经被添加过了`, '信息', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                });
-                return false
-            }else{
-                this.fileList.push(file);
-            }
-        }
+            this.fileList =fileList
+        },
+        /* 删除文件之后的钩子函数 */
+        // removeTest(file,fileList){
+        //     console.log(123123);
+        // }
+
     },
     created() {},
-    mounted() {},
+    mounted() {
+        console.log(this.$refs.updata);
+        this.updata = this.$refs.updata
+    },
     beforeCreate() {},
     beforeMount() {},
     beforeUpdate() {},
