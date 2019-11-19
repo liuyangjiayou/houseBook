@@ -49,15 +49,23 @@
 
 
 /* 重置单选框样式 */
+.el-radio__inner{
+    .bdr(0);
+}
 .el-radio__input.is-checked+.el-radio__label{
     .c(@green);
 }
 .el-radio__input.is-checked .el-radio__inner{
     .c(@green);
-    .bgc(@green);
+    .bgc(transparent);
+    .bdn();
+    .bgi(-71px 0);
 } 
 .el-select .el-input .el-select__caret{
     .height(34px);
+}
+.el-radio__inner::after{
+    .bgc(@green);
 }
 /* 重置单选样式 */
 .el-checkbox__input.is-checked+.el-checkbox__label{
@@ -96,6 +104,13 @@
 //     .w(13px);
 // }
 
+/* 重置form表单 */
+.el-form-item__content{
+    line-height: 36px;
+}
+.el-form-item__label{
+    line-height: 36px;
+}
 /* table表单样式重置 */
 .el-table__header tr{
     .bgc(#fafafa);
@@ -119,6 +134,16 @@
 
 /* 重置弹窗样式 */
 //底部按钮为居中显示
+.el-dialog__header{
+    .bdbx(1px,solid,@ceb);
+    .pdt(10px);
+}
+.el-dialog__title{
+    .ft(14px);
+}
+.el-dialog__headerbtn{
+    top: 16px;
+}
 .dialog-footer-center .el-dialog__footer{
     text-align: center;
 }

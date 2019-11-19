@@ -66,7 +66,7 @@
                     <template slot-scope="scope">
                         <el-button type="text" @click="goDetails(scope.row.id)">详情</el-button>
                         <el-button type="text" @click="editHouseCart(scope.row.id)">编辑</el-button>
-                        <el-button type="text">二维码</el-button>
+                        <el-button type="text" @click="setQRcode(scope.row.id)">二维码</el-button>
                         <el-button type="text" @click="addTurn(scope.row.id)">添加流转记录</el-button>
                     </template>
                 </el-table-column>
@@ -132,23 +132,73 @@
             </span>
         </el-dialog>
         <!-- 编辑房本 -->
-        <el-dialog title="编辑房本" :visible.sync="dialogEdit" width="720px">
-                <el-form ref="dialogAddEdit">
+        <el-dialog class="dialog-footer-center" title="编辑房本" :visible.sync="dialogEdit" width="874px">
+                <el-form ref="dialogAddEdit" v-model="formData2">
                     <el-row>
-                        <el-col :span="10">
-                            <el-form-item label="房产证号">
-                                
+                        <el-col :span="8">
+                            <el-form-item label="房产证号" label-width="106px">
+                                <el-input placeholder="输入房产证编号" v-model="formData2.houseCard"></el-input>
                             </el-form-item>
                         </el-col >
-                        <el-col :span="10">
-                            <el-form-item label="房产证类型">
-                                
+                        <el-col :span="8">
+                            <el-form-item label="房产证类型" label-width="106px">
+                                <el-select v-model="formData2.houseTypeAction">
+                                    <el-option v-for="(v,i) in formData2.houseType" :key="i" :label="v.label" :value="v.value"></el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    
-                     
-                    
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="产权人" label-width="106px">
+                                <el-input placeholder="输入产权人姓名" v-model="formData2.name"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="有无公证书" label-width="106px">
+                                <el-radio v-model="formData2.houseNotariza" v-for="(v,i) in formData2.houseNotarizaList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="是否共有" label-width="106px">
+                            <el-radio v-model="formData2.isCommon" v-for="(v,i) in formData2.isCommonList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                        </el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="共有人姓名" label-width="106px">
+                                <el-input v-model="formData2.commonName" placeholder="输入共有人姓名"></el-input>
+                            </el-form-item>
+                        </el-col >
+                        <el-col :span="8">
+                            <el-form-item label="房产证号" label-width="106px">
+                                <el-input v-model="formData2.houseNum" placeholder="输入房产证号"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="" label-width="106px"><el-button type="text">+添加共有人</el-button></el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="16">
+                            <el-form-item label="房本地址" label-width="106px">
+                                <el-input v-model="formData2.houseAddress" placeholder="输入房本地址"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="16">
+                            <el-form-item label="备注" label-width="106px">
+                                <el-input
+                                    type="textarea"
+                                    :rows="2"
+                                    v-model="formData2.beizhu"
+                                    placeholder="输入备注内容">
+                                </el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
                 </el-form>
                 <span slot="footer" class="">
                     <el-button type="primary" @click="dialogEdit = false">保存</el-button>
@@ -269,6 +319,29 @@ export default {
                 textarea : "",
                 value9 : [],
                 fileList : "",
+            },
+            formData2 :{
+                houseCard : 123456456,
+                houseType : [
+                    {value : 1, label : '市证'},
+                    {value : 2, label : '村证'},
+                ],
+                houseTypeAction : 2,
+                name : "刘杨",
+                isCommonList : [
+                    {value : 1,label : "独有"},
+                    {value : 2,label : "共有"},
+                ],
+                isCommon : 2,
+                houseNotarizaList : [
+                    {value : 1,label : "有"},
+                    {value : 2,label : "无"},
+                ],
+                houseNotariza : 2,
+                commonName : "刘杨共有人",
+                houseNum : 123123,
+                houseAddress : "石家庄市平安公园",
+                beizhu : "我是备注信息"
             },
             options4: [],
             value9: [],
