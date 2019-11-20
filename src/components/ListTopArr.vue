@@ -2,7 +2,7 @@
     <div class="box">
         <!-- 这是table列表上面的计数条 -->
         <p class="l title">房本列表</p>
-        <p class="l num">共计<strong>5</strong>条</p>       
+        <p class="l num">共计<strong>{{num}}</strong>条</p>       
     </div>
 </template>
 
@@ -10,6 +10,9 @@
 
 export default {
     components: {},
+    props : {
+        num : '',
+    },
     data() {
         return {
 

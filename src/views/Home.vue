@@ -18,6 +18,7 @@ import Footer from '../components/Footer'
 import Breadcrumb from '../components/Breadcrumb'
 import Info from '../pageComponents/Home/Info'
 import { post } from '../api/api.js'
+import { mapState } from 'vuex'
 export default {
     components: {
         Header,
@@ -30,14 +31,18 @@ export default {
 
         };
     },
-    computed: {},
+    computed: {
+       
+    },
     watch: {},
     methods: {},
-    created() {},
-    mounted() {
-        post('/index/index/index').then((res)=>{
-            console.log(res);
+    created() {
+         post('/User/getUserInfo').then((res)=>{
+            this.$store.dispatch('setUserInfo',res.data.list[0]);
         });
+    },
+    mounted() {
+       
     },
     beforeCreate() {},
     beforeMount() {},

@@ -134,12 +134,13 @@
 <script>
 import Footer from '../../components/Footer'
 import ListErrBox from '../../components/ListErrBox'
+import { post } from '../../api/api'
   export default {
     name:'',
     props:[''],
     data () {
       return {
-
+          commonData : '',
       };
     },
 
@@ -147,11 +148,15 @@ import ListErrBox from '../../components/ListErrBox'
         Footer,
         ListErrBox
     },
-
     computed: {},
-
+   
     beforeMount() {},
-
+    created(){
+        post('/Index/detail_info/?cid=2').then(res => {
+            this.commonData = res.data;
+            console.log(this.commonData);
+        });
+    },
     mounted() {},
 
     methods: {},

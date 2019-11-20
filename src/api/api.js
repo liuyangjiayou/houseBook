@@ -21,9 +21,7 @@ axios.interceptors.request.use(function (config) {
 
 //接受响应的一个拦截器
 axios.interceptors.response.use(function (res) {
-    
-    // if(res.data.errcode == 4002){console.log(res.data.data.url);window.location.href = res.data.data.url;return false;};
-
+    // if(res.data.errcode == 4002){window.location.href = res.data.data.url;return false;};
     return res.data
 },function (err) {
     return Promise.reject(err);

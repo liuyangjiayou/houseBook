@@ -13,13 +13,13 @@
         </ul>
         <div class="r right">
             <div class="l linkAS">
-                <a href="">
+                <a :href="getUserInfo.asurl">
                     <i class="dib2"></i>
                     <span class="dib2">切换至AS系统</span>
                 </a>
             </div>
             <div class="l info-box">
-                <p class="pos"><span>祝亚会</span> - <span>贷款专员</span> - <span>金融部</span><i class="dib2"></i></p>
+                <p class="pos"><span>{{getUserInfo.username}}</span> - <span>{{getUserInfo.position_name}}</span> - <span>{{getUserInfo.dept_name}}</span><i class="dib2"></i></p>
                 <div>
 
                 </div>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-
+  import { mapGetters } from 'vuex'
   export default {
     name:'',
     props:[''],
@@ -42,11 +42,17 @@
 
     components: {},
 
-    computed: {},
+    computed: {
+        ...mapGetters([
+            'getUserInfo'
+        ]),
+    },
 
     beforeMount() {},
 
-    mounted() {},
+    mounted() {
+        console.log(this.getUserInfo);
+    },
 
     methods: {},
 

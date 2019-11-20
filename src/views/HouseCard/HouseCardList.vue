@@ -1,13 +1,5 @@
 <template>
     <div class="">
-
-
-        <div class="main">
-            <!-- 测试封装上传图片 -->
-                <!-- <uploadMultiple></uploadMultiple> -->
-            <!-- end -->
-        </div>
-
         <!-- 房本管理 -->
         <div class="main">
              <div class="nav-wrap">
@@ -16,40 +8,40 @@
                     <input type="text" class="keyword-input" placeholder="输入产权人姓名">
                     <span class="button dib2">搜索</span>
                 </div>
-                <div class="nav-box" v-for="(v1,i1) in navList" :key="i1">
+                <div class="nav-box" v-for="(v1,i1) in commonData.navlist" :key="i1">
                     <p class="dib2">{{v1.title}}：</p>
                     <ul class="dib2">
-                        <li v-for="(v2,i2) in v1.list" :key="i2" :id="v2.id" class="dib2" @click="navChangeRadioFn($event,v2,i2)">{{v2.title}}</li>
+                        <li v-for="(v2,i2) in v1.item" :key="i2" :id="v2.id" class="dib2" @click="navChangeRadioFn($event,v2,i2)">{{v2.label}}</li>
                     </ul>
                 </div>
                 <div v-show="navResultList.length > 0" class="nav-result-box">
                     <p>已选：</p>
                     <ul>
-                        <li v-for="(item,index) in navResultList" :key="index" class="dib2">{{item.title}}<span @click="removeNavFn(item)"><i></i></span></li>
+                        <li v-for="(item,index) in navResultList" :key="index" class="dib2">{{item.label}}<span @click="removeNavFn(item)"><i></i></span></li>
                         <li class="dib2 last-li" @click="clearNavFn"><i></i>清空已选</li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="main">
-            <ListTopArr></ListTopArr>
+            <ListTopArr :num="commonData.total"></ListTopArr>
         </div>
         <div class="table-list-box main">
-            <el-table :data="tableData" style="width:100%">
+            <el-table :data="commonData.list" style="width:100%">
                 <el-table-column label="序号" type="index" width="84" align="center"></el-table-column>
                 <el-table-column label="产权人" width="120">
                     <template slot-scope="scope">
-                        {{scope.row.name}}
+                        {{scope.row.owner_name}}
                     </template>
                 </el-table-column>
                 <el-table-column label="房本类型" width="127">
                     <template slot-scope="scope">
-                        {{scope.row.houseCardType}}
+                        {{scope.row.property_cert}}
                     </template>
                 </el-table-column>
                 <el-table-column label="业务类型" width="150">
                     <template slot-scope="scope">
-                        {{scope.row.type}}
+                        {{scope.row.business_type}}
                     </template>
                 </el-table-column>
                 <el-table-column label="房本地址" width="310">
@@ -64,10 +56,24 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                     <template slot-scope="scope">
-                        <el-button type="text" @click="goDetails(scope.row.id)">详情</el-button>
-                        <el-button type="text" @click="editHouseCart(scope.row.id)">编辑</el-button>
-                        <el-button type="text" @click="setQRcode(scope.row.id)">二维码</el-button>
-                        <el-button type="text" @click="addTurn(scope.row.id)">添加流转记录</el-button>
+                        <div class="dib text-btn" @click="goDetails(scope.row.id)">详情</div>
+                        <div class="dib text-btn" @click="editHouseCart(scope.row.id)">编辑</div>
+                        <div class="dib text-btn popover-warp" @mouseout="delQRcode($event)" @mouseover="setQRcode($event,scope.row.id)">
+                            二维码
+                            <div class="popover-box">
+                                <div class="qrcode-box"></div>
+                                <div class="text-box">
+                                    <div>
+                                        <p>房本地址：</p>
+                                        <p>新华区新华路239号5-5-102</p>
+                                    </div>
+                                    <div class="text-btn text-underline">
+                                        打印此房本
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dib text-btn" @click="addTurn(scope.row.id)">添加流转记录</div>
                     </template>
                 </el-table-column>
                 <div slot="empty">
@@ -78,7 +84,8 @@
                 <el-pagination
                     background
                     layout="prev, pager, next"
-                    :total="1000">
+                    :page-size="10"
+                    :total="commonData.total">
                 </el-pagination>
             </div>
         </div>
@@ -192,7 +199,7 @@
                             <el-form-item label="备注" label-width="106px">
                                 <el-input
                                     type="textarea"
-                                    :rows="2"
+                                    :rows="4"
                                     v-model="formData2.beizhu"
                                     placeholder="输入备注内容">
                                 </el-input>
@@ -210,15 +217,15 @@
 </template>
 
 <script>
-import TopNavList from '../../components/TopNavList'
 import ListTopArr from '../../components/ListTopArr'
 import ListErrBox from '../../components/ListErrBox'
 import Footer from '../../components/Footer'
 import uploadMultiple from '../../components/upLoadMultiple'
 import { nextTick } from 'q'
+import QRCode from 'qrcodejs2'
+import { post } from '../../api/api.js'
 export default {
     components: {
-        TopNavList,
         ListTopArr,
         Footer,
         ListErrBox,
@@ -226,6 +233,7 @@ export default {
     },
     data() {
         return {
+            commonData : '',
             navResultList : [],
             navList : [
                 {title : '房本类型',list : [{title : '不限',id : 'a0'},{title : '市证',id : 'a1'},{title : '村证',id : 'a2'},{title : '其他',id : 'a3'}]},
@@ -437,9 +445,31 @@ export default {
         /* 清除数据 */
         clearNavFn(){
             this.navResultList = [];
+        },
+        /* 设置二维码 */
+        setQRcode(e,id){
+            let codeEle = e.currentTarget.querySelector('.qrcode-box');
+            new QRCode(codeEle,{
+                text : '你好啊' + id,
+                width : 100,
+                height : 100,
+                colorDark : '#000',
+                colorLight : '#fff',
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        },
+        /* 移除二维码 */
+        delQRcode(e){
+            e.currentTarget.querySelector('.qrcode-box').innerHTML = "";
         }
     },
-    created() {},
+    created() {
+        post('/Index/lists/').then(res=>{
+            this.commonData = res.data;
+            console.log(this.commonData);
+            this.navList = res.data.navlist
+        })
+    },
     mounted() {
         this.list = this.states.map(item => {
             return { value: item, label: item };
@@ -573,6 +603,54 @@ export default {
         li.active{
             .c(@green);
         };
+    }
+}
+.popover-warp{
+    position: relative;
+    .mg(0 10px);
+    .popover-box{
+        display: none;
+        justify-content: flex-start;
+        position: absolute;
+        top: 30px;
+        left: -130px;
+        z-index: 1;
+        .pd(20px);
+        .bd(1px,solid,@blue);
+        .bgc(@white);
+        text-align: left;
+        .qrcode-box{
+            .mgr(12px);
+            .w(100px);
+            .h(100px);
+        }
+        .text-box{
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            .w(190px);
+            p{
+                .c(@wblack);
+            }
+        }
+        &:before{
+            content : "";
+            position: absolute;
+            top: -8px;
+            left: 148px;
+            .w(14px);
+            .h(14px);
+            .bd(1px,solid,@blue);
+            border-bottom: transparent;
+            border-right: transparent;
+            .bgc(@white);
+            transform: rotate(45deg);
+        }
+    }
+    &:hover{
+        .popover-box{
+            display: flex;
+        }
     }
 }
 </style>
