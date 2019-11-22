@@ -8,11 +8,11 @@
                 <ul class="ul1 ovh">
                     <li class="l li1">
                         <strong>房产证号：</strong>
-                        <span class="cblue">132586954</span>
+                        <span class="cblue">{{commonData.number}}</span>
                     </li>
                     <li class="l li1">
                         <strong>产权人：</strong>
-                        <span class="cblue">李树杰</span>
+                        <span class="cblue">{{commonData.owner_name}}</span>
                     </li>
                     <li class="l">
                         <strong>房产证类型：</strong>
@@ -30,12 +30,12 @@
                     </li>
                     <li class="l">
                         <strong>房产证地址：</strong>
-                        <span class="cblue">新华区新华路987号6-5-412</span>
+                        <span class="cblue">{{commonData.address}}</span>
                     </li>
                 </ul>
                 <ul>
                     <li>
-                        <strong>房产证地址：</strong>
+                        <strong>备注：</strong>
                         <span class="cblue">房本地址与房屋实际地址不一致</span>
                     </li>
                 </ul>
@@ -53,7 +53,30 @@
             </h6>
             <div class="house-turn-wrap">
                 <ul>
-                    <li>
+                    <li v-for="(v,i) in commonData.transinfo" :key="i">
+                        <div class="cicon"></div>
+                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+                        <div class="dib2 vtat">
+                        <p>
+                            <span class="mg10px">刘明玉</span>
+                            <span class="mg10px">永佳西里A店</span>
+                            <span>2019.09.26 12:25</span>
+                        </p>
+                        <p>
+                            <strong class="cblue mg10px">录入</strong>
+                            <span>收本原因：<span class="cblue">网签</span></span>
+                        </p>
+                        <p>
+                            <span class="c6">持本时长：</span><span>4小时</span>
+                        </p>
+                        <p>备注：这里是备注内容</p>
+                        <p>
+                            <span class="dib2">收本凭证</span>
+                            <img class="dib2" src="" alt="">
+                        </p>
+                        </div>
+                    </li>
+                    <!-- <li>
                         <div class="cicon"></div>
                         <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
                         <div class="dib2 vtat">
@@ -98,33 +121,10 @@
                             <img class="dib2" src="" alt="">
                         </p>
                         </div>
-                    </li>
-                    <li>
-                        <div class="cicon"></div>
-                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
-                        <div class="dib2 vtat">
-                        <p>
-                            <span class="mg10px">刘明玉</span>
-                            <span class="mg10px">永佳西里A店</span>
-                            <span>2019.09.26 12:25</span>
-                        </p>
-                        <p>
-                            <strong class="cblue mg10px">录入</strong>
-                            <span>收本原因：<span class="cblue">网签</span></span>
-                        </p>
-                        <p>
-                            <span class="c6">持本时长：</span><span>4小时</span>
-                        </p>
-                        <p>备注：这里是备注内容</p>
-                        <p>
-                            <span class="dib2">收本凭证</span>
-                            <img class="dib2" src="" alt="">
-                        </p>
-                        </div>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
-            <ListErrBox></ListErrBox>
+            <ListErrBox v-if="commonData.transinfo && ommonData.transinfo.length > 0"></ListErrBox>
         </div>
     </div>
     <Footer></Footer>
@@ -152,12 +152,14 @@ import { post } from '../../api/api'
    
     beforeMount() {},
     created(){
+       
+    },
+    mounted() {
         post('/Index/detail_info/?cid=2').then(res => {
             this.commonData = res.data;
-            console.log(this.commonData);
+            console.log(this.commonData.transinfo.length);
         });
     },
-    mounted() {},
 
     methods: {},
 
