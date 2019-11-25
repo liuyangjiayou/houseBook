@@ -31,6 +31,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import { post } from './../api/api'
   export default {
     name:'',
     props:[''],
@@ -47,11 +48,15 @@
             'getUserInfo'
         ]),
     },
-
+    created(){
+        post('/User/getUserInfo').then((res)=>{
+            this.$store.dispatch('setUserInfo',res.data);
+        });
+    },
     beforeMount() {},
 
     mounted() {
-        console.log(this.getUserInfo);
+       
     },
 
     methods: {},

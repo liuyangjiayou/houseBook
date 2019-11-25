@@ -155,9 +155,10 @@ import { post } from '../../api/api'
        
     },
     mounted() {
-        post('/Index/detail_info/?cid=2').then(res => {
+        let houseId = this.$route.query.c_id;
+        post('/Index/detailInfo',{c_id : houseId}).then(res => {
             this.commonData = res.data;
-            console.log(this.commonData.transinfo.length);
+            console.log(this.commonData);
         });
     },
 

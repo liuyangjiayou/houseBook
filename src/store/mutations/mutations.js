@@ -4,7 +4,6 @@ import {
  } from '../mutationTypes/mutationType';
 export default {
     [SET_USER_INFO](state,userInfo){
-        console.log(userInfo)
         state.userInfo = userInfo;
     }
 }

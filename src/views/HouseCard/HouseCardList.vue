@@ -5,7 +5,7 @@
              <div class="nav-wrap">
                 <!-- table列表上面的Nav导航 -->
                 <div>
-                    <input type="text" class="keyword-input" placeholder="输入产权人姓名">
+                    <input type="text" v-model="keyword" class="keyword-input" placeholder="输入产权人姓名">
                     <span class="button dib2">搜索</span>
                 </div>
                 <div class="nav-box" v-for="(v1,i1) in commonData.navlist" :key="i1">
@@ -112,10 +112,10 @@
                         :remote-method="remoteMethod"
                         :loading="loading">
                         <el-option
-                            v-for="item in options4"
-                            :key="item.value"
-                            :label="item.label"
-                            :value="item.value">
+                            v-for="(item,index) in options4"
+                            :key="index"
+                            :label="item.name"
+                            :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -134,7 +134,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="">
-                <el-button type="primary" @click="dialogAddTurn = false">保存</el-button>
+                <el-button type="primary" @click="submit()">保存</el-button>
                 <el-button @click="()=>{this.dialogAddTurn = false;this.resetForm('dialogAddTurn')}">取消</el-button>
             </span>
         </el-dialog>
@@ -235,6 +235,7 @@ export default {
         return {
             commonData : '',
             navResultList : [],
+            keyword : '',
             navList : [
                 {title : '房本类型',list : [{title : '不限',id : 'a0'},{title : '市证',id : 'a1'},{title : '村证',id : 'a2'},{title : '其他',id : 'a3'}]},
                 {title : '业务类型',list : [{title : '不限',id : 'b0'},{title : '买卖成交',id : 'b1'},{title : 'VIP',id : 'b2'},{title : '二手房新出本',id : 'b3'},{title : '抵押贷款',id : 'b4'}]},
@@ -300,15 +301,16 @@ export default {
             dialogAddTurn : false,
             dialogEdit : false,
             formData: {
-                turnID : '',
+                turnOptionID : '2',
                 turnOption : [
-                    {value : 1 ,label : '流转类型一'},
+                    {id : 1 ,value : '流转类型一'},
                     {value : 2 ,label : '流转类型二'},
                     {value : 3 ,label : '流转类型三'},
                     {value : 4 ,label : '流转类型四'},
                     {value : 5 ,label : '流转类型五'},
                 ],
-                cause : '',
+
+                causeIKD : '2',
                 causeList : [
                     {value : 1 ,label : '收本原因一'},
                     {value : 2 ,label : '收本原因二'},
@@ -316,6 +318,7 @@ export default {
                     {value : 4 ,label : '收本原因四'},
                     {value : 5 ,label : '收本原因五'},
                 ],
+                value9 : [],
                 region: '',
                 region2: '',
                 date1: '',
@@ -325,7 +328,7 @@ export default {
                 resource: '',
                 desc: '',
                 textarea : "",
-                value9 : [],
+              
                 fileList : "",
             },
             formData2 :{
@@ -393,23 +396,28 @@ export default {
     watch: {},
     methods: {
         goDetails(id){
-            this.$router.push({ path: '/houseCard/details'});
+            this.$router.push({ path: '/houseCard/details',query : {cid : id}});
         },
         addTurn(id){
             this.dialogAddTurn = true;
         },
+        /* 系统号搜索 */
         remoteMethod(query) {
             if (query !== '') {
             this.loading = true;
-            setTimeout(() => {
-                this.loading = false;
-                this.options4 = this.list.filter(item => {
-                return item.label.toLowerCase()
-                    .indexOf(query.toLowerCase()) > -1;
-                });
-            }, 200);
+                post('/User/getAgentInfo',{val : query}).then(res=>{
+                    this.loading = false;
+                    this.options4 = res.data.list;
+                })
+                // setTimeout(() => {
+                //     this.loading = false;
+                //     this.options4 = this.list.filter(item => {
+                //     return item.label.toLowerCase()
+                //         .indexOf(query.toLowerCase()) > -1;
+                //     });
+                // }, 200);
             } else {
-            this.options4 = [];
+                this.options4 = [];
             }
         },
         /* 编辑房本 */
@@ -461,12 +469,16 @@ export default {
         /* 移除二维码 */
         delQRcode(e){
             e.currentTarget.querySelector('.qrcode-box').innerHTML = "";
+        },
+        /* 上传图片 */
+        submit(){
+            this.$refs.aaa.submit();
+            this.dialogAddTurn = false;
         }
     },
     created() {
         post('/Index/lists/').then(res=>{
             this.commonData = res.data;
-            console.log(this.commonData);
             this.navList = res.data.navlist
         })
     },

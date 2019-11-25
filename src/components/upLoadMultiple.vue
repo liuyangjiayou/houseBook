@@ -6,7 +6,7 @@
         <!-- 选取文件 -->
         <el-upload
             class="liu-uploader-button"
-            action="#"
+            action="http://localhost:8080/api/Upload/uploader"
             accept="image/jpeg,image/gif,image/png"
             multiple
             ref="updata"
@@ -43,6 +43,7 @@
                 </span>
             </div>
         </el-upload>
+        <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
     </div>
 </template>
 
@@ -96,6 +97,9 @@ export default {
         addFile(file,fileList){
             this.fileList =fileList
         },
+        submitUpload(){
+            this.$refs.updata.submit();
+        }
         /* 删除文件之后的钩子函数 */
         // removeTest(file,fileList){
         //     console.log(123123);

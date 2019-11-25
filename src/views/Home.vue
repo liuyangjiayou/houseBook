@@ -37,9 +37,7 @@ export default {
     watch: {},
     methods: {},
     created() {
-         post('/User/getUserInfo').then((res)=>{
-            this.$store.dispatch('setUserInfo',res.data.list[0]);
-        });
+         
     },
     mounted() {
        
