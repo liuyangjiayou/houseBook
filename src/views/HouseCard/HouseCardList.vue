@@ -507,6 +507,7 @@ export default {
     .w(100%);
     .bd(1px,solid,@e6);
     .bgc(@white);
+    .minh(400px);
     .button{
         .w(90px);
         .height(40px);

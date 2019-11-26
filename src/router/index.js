@@ -19,10 +19,36 @@ const routes = [
     {
         path : '/buyHouseLoan',
         name : 'buyHouseLoan',
-        component: () => import( '../views/BuyHoustLoan.vue'),
+        component: () => import( '../views/BuyHouseLoan/BuyHouseLoanIndex.vue'),
         meta : {
-            title : '购房贷款 '
-        }
+            title : '购房贷款'
+        },
+        children : [
+            {
+                path : '/buyHouseLoan/wait',
+                name : 'buyHouseLoan-wait',
+                component : () => import('../views/BuyHouseLoan/BuyHouseWaitSingle.vue'),
+                meta : {
+                    title : '待收单',
+                }
+            },
+            {
+                path : '/buyHouseLoan/route',
+                name : 'buyHouseLoan-route',
+                component : () => import('../views/BuyHouseLoan/BuyHouseRoute.vue'),
+                meta : {
+                    title : '在途单',
+                }
+            },
+            {
+                path : '/buyHouseLoan/route',
+                name : 'buyHouseLoan-route',
+                component : () => import('../views/BuyHouseLoan/BuyHouseRoute.vue'),
+                meta : {
+                    title : '在途单',
+                }
+            }
+        ]
     },
     {
         path : '/houseCard',

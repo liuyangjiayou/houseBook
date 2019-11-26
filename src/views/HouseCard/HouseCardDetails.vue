@@ -16,17 +16,17 @@
                     </li>
                     <li class="l">
                         <strong>房产证类型：</strong>
-                        <span class="cblue">市政</span>
+                        <span class="cblue">{{commonData.property_cert}}</span>
                     </li>
                 </ul>
                 <ul class="ul1">
                     <li class="l li1">
                         <strong>是否共有：</strong>
-                        <span class="cblue">否</span>
+                        <span class="cblue">{{commonData.is_common}}</span>
                     </li>
                     <li class="l li1">
                         <strong>有无公证书：</strong>
-                        <span class="cblue">无</span>
+                        <span class="cblue">{{commonData.has_auth}}</span>
                     </li>
                     <li class="l">
                         <strong>房产证地址：</strong>
@@ -36,7 +36,7 @@
                 <ul>
                     <li>
                         <strong>备注：</strong>
-                        <span class="cblue">房本地址与房屋实际地址不一致</span>
+                        <span class="cblue">{{commonData.remarks}}</span>
                     </li>
                 </ul>
             </div>
@@ -52,27 +52,34 @@
                 </ul>
             </h6>
             <div class="house-turn-wrap">
+                <!-- <el-timeline :reverse="reverse">
+                        <el-timeline-item
+                        v-for="(v,i) in commonData.transinfo" :key="i"
+                        :timestamp="activity.timestamp">
+                        {{activity.content}}
+                        </el-timeline-item>
+                    </el-timeline> -->
                 <ul>
                     <li v-for="(v,i) in commonData.transinfo" :key="i">
                         <div class="cicon"></div>
-                        <div class="dib2 vtat img-box"><el-avatar :size="50" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar></div>
+                        <div class="dib2 vtat img-box"><el-avatar :size="50" :src="v.avatar"></el-avatar></div>
                         <div class="dib2 vtat">
                         <p>
-                            <span class="mg10px">刘明玉</span>
-                            <span class="mg10px">永佳西里A店</span>
+                            <span class="mg10px">{{v.username}}</span>
+                            <span class="mg10px">{{v.department_name}}</span>
                             <span>2019.09.26 12:25</span>
                         </p>
                         <p>
-                            <strong class="cblue mg10px">录入</strong>
+                            <strong class="cblue mg10px">{{v.status}}</strong>
                             <span>收本原因：<span class="cblue">网签</span></span>
                         </p>
                         <p>
-                            <span class="c6">持本时长：</span><span>4小时</span>
+                            <span class="c6">持本时长：</span><span>{{v.collect_time}}</span>
                         </p>
-                        <p>备注：这里是备注内容</p>
+                        <p>备注：{{v.remarks}}</p>
                         <p>
                             <span class="dib2">收本凭证</span>
-                            <img class="dib2" src="" alt="">
+                            <img class="dib2" :src="v.image" alt="">
                         </p>
                         </div>
                     </li>
@@ -124,7 +131,7 @@
                     </li> -->
                 </ul>
             </div>
-            <ListErrBox v-if="commonData.transinfo && ommonData.transinfo.length > 0"></ListErrBox>
+            <ListErrBox v-if="commonData.transinfo && commonData.transinfo.length > 0"></ListErrBox>
         </div>
     </div>
     <Footer></Footer>
@@ -152,14 +159,14 @@ import { post } from '../../api/api'
    
     beforeMount() {},
     created(){
-       
-    },
-    mounted() {
-        let houseId = this.$route.query.c_id;
-        post('/Index/detailInfo',{c_id : houseId}).then(res => {
+       let houseId = this.$route.query.cid;
+        post('/Index/detailInfo',{cid : houseId}).then(res => {
             this.commonData = res.data;
             console.log(this.commonData);
         });
+    },
+    mounted() {
+        
     },
 
     methods: {},

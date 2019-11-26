@@ -20,8 +20,20 @@
             </div>
             <div class="l info-box">
                 <p class="pos"><span>{{getUserInfo.username}}</span> - <span>{{getUserInfo.position_name}}</span> - <span>{{getUserInfo.dept_name}}</span><i class="dib2"></i></p>
-                <div>
-
+                <div class="store-box">
+                    <div class="agent-box">
+                        <div class="img-box">
+                            <el-avatar :size="52" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                        </div>
+                        <div class="name-box">
+                            <p><span>{{getUserInfo.username}}</span><span>{{getUserInfo.position_name}}</span></p>
+                            <p>系统号: {{getUserInfo.account}}</p>
+                        </div>
+                    </div>
+                    <p class="btn-box">
+                        <a href=""><i></i><span>个人信息</span></a>
+                        <a href=""><i></i><span>退出系统</span></a>
+                    </p>
                 </div>
             </div>            
         </div>
@@ -133,16 +145,75 @@
                     }
                 }
                 .info-box{
+                    position: relative;
                     .pos{
                         .height(52px);
                         .c(@white);
                         .ft(14px);
+                        cursor: pointer;
                         i{
                             .mgl(6px);
                             .w(8px);
                             .h(5px);
                             .bgi(-14px 0);
                             vertical-align: 2px;
+                        }
+                    }
+                    &:hover .store-box{
+                        display: block;
+                    }
+                    .store-box{
+                        display: none;
+                        position: absolute;
+                        top: 52px;
+                        right: 0;
+                        .pd(14px 15px);
+                        .w(245px);
+                        .minh(112px);
+                        .bgc(@white);
+                        box-shadow: -1px 2px 10px 1px #f2f2f2;
+                        z-index: 10;
+                        .agent-box{
+                            display: flex;
+                            flex-direction: row;
+                            .name-box{
+                                .mgl(10px);
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                                p:first-child{
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: space-between;
+                                }
+                                p:last-child{
+                                    .mgt(4px);
+                                    .c(grey);
+                                }
+                            }
+                        }
+                        .btn-box{
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+                            .mgt(30px);
+                            a:first-child,a:last-child{
+                                display: flex;
+                                flex-direction: row;
+                                align-items: center;
+                                cursor: pointer;
+                                .c(@c333);
+                                i{
+                                    display: flex;
+                                    .mgr(8px);
+                                    .w(16px);
+                                    .h(16px);
+                                    .bgc(red);
+                                }
+                                &:hover{
+                                    text-decoration: underline;
+                                }
+                            }
                         }
                     }
                 }

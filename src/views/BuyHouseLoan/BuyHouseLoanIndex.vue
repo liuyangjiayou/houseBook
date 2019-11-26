@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import Header from '../components/Header';
-import Breadcrumb from '../components/Breadcrumb';
+import Header from '../../components/Header';
+import Breadcrumb from '../../components/Breadcrumb';
 export default {
     components: {
         Header,
@@ -39,7 +39,7 @@ export default {
     }
 </script>
 <style lang='less' scoped>
-@import url(../assets/css/common.less);
+@import url(../../assets/css/common.less);
 .wrap{
     .w(100%);
     .h(223px);
