@@ -159,7 +159,7 @@ import { post } from '../../api/api'
    
     beforeMount() {},
     created(){
-       let houseId = this.$route.query.cid;
+        let houseId = this.$route.query.cid;
         post('/Index/detailInfo',{cid : houseId}).then(res => {
             this.commonData = res.data;
             console.log(this.commonData);
@@ -184,6 +184,7 @@ import { post } from '../../api/api'
   .bd(1px,solid,@e6);
   .house-card-wrap{
     .pd(12px 0 13px 0);
+    .minh(75px);
     .ul1{
       .height(28px);
       .li1{.w(214px)};
@@ -195,6 +196,7 @@ import { post } from '../../api/api'
   .pd(0 20px 20px);
   .bgc(@white);
   .bd(1px,solid,@e6);
+  .minh(600px);
   .house-turn-wrap{
     .pd(20px 20px 0);
     li{

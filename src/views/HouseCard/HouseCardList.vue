@@ -140,77 +140,77 @@
         </el-dialog>
         <!-- 编辑房本 -->
         <el-dialog class="dialog-footer-center" title="编辑房本" :visible.sync="dialogEdit" width="874px">
-                <el-form ref="dialogAddEdit" v-model="formData2">
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="房产证号" label-width="106px">
-                                <el-input placeholder="输入房产证编号" v-model="formData2.houseCard"></el-input>
-                            </el-form-item>
-                        </el-col >
-                        <el-col :span="8">
-                            <el-form-item label="房产证类型" label-width="106px">
-                                <el-select v-model="formData2.houseTypeAction">
-                                    <el-option v-for="(v,i) in formData2.houseType" :key="i" :label="v.label" :value="v.value"></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="产权人" label-width="106px">
-                                <el-input placeholder="输入产权人姓名" v-model="formData2.name"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="有无公证书" label-width="106px">
-                                <el-radio v-model="formData2.houseNotariza" v-for="(v,i) in formData2.houseNotarizaList" :key="i" :label="v.value">{{v.label}}</el-radio>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-form-item label="是否共有" label-width="106px">
-                            <el-radio v-model="formData2.isCommon" v-for="(v,i) in formData2.isCommonList" :key="i" :label="v.value">{{v.label}}</el-radio>
+            <el-form ref="dialogAddEdit" v-model="editFormData">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="房产证号" label-width="106px">
+                            <el-input placeholder="输入房产证编号" v-model="editFormData.number"></el-input>
                         </el-form-item>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="共有人姓名" label-width="106px">
-                                <el-input v-model="formData2.commonName" placeholder="输入共有人姓名"></el-input>
-                            </el-form-item>
-                        </el-col >
-                        <el-col :span="8">
-                            <el-form-item label="房产证号" label-width="106px">
-                                <el-input v-model="formData2.houseNum" placeholder="输入房产证号"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-form-item label="" label-width="106px"><el-button type="text">+添加共有人</el-button></el-form-item>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="16">
-                            <el-form-item label="房本地址" label-width="106px">
-                                <el-input v-model="formData2.houseAddress" placeholder="输入房本地址"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="16">
-                            <el-form-item label="备注" label-width="106px">
-                                <el-input
-                                    type="textarea"
-                                    :rows="4"
-                                    v-model="formData2.beizhu"
-                                    placeholder="输入备注内容">
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </el-form>
-                <span slot="footer" class="">
-                    <el-button type="primary" @click="dialogEdit = false">保存</el-button>
-                    <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
-                </span>
+                    </el-col >
+                    <el-col :span="8">
+                        <el-form-item label="房产证类型" label-width="106px">
+                            <el-select v-model="editFormData.houseTypeAction">
+                                <el-option v-for="(v,i) in editFormData.houseType" :key="i" :label="v.label" :value="v.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="产权人" label-width="106px">
+                            <el-input placeholder="输入产权人姓名" v-model="editFormData.name"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="有无公证书" label-width="106px">
+                            <el-radio v-model="editFormData.houseNotariza" v-for="(v,i) in editFormData.houseNotarizaList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-form-item label="是否共有" label-width="106px">
+                        <el-radio v-model="editFormData.isCommon" v-for="(v,i) in editFormData.isCommonList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                    </el-form-item>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="共有人姓名" label-width="106px">
+                            <el-input v-model="editFormData.commonName" placeholder="输入共有人姓名"></el-input>
+                        </el-form-item>
+                    </el-col >
+                    <el-col :span="8">
+                        <el-form-item label="房产证号" label-width="106px">
+                            <el-input v-model="editFormData.houseNum" placeholder="输入房产证号"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-form-item label="" label-width="106px"><el-button type="text">+添加共有人</el-button></el-form-item>
+                </el-row>
+                <el-row>
+                    <el-col :span="16">
+                        <el-form-item label="房本地址" label-width="106px">
+                            <el-input v-model="editFormData.address" placeholder="输入房本地址"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="16">
+                        <el-form-item label="备注" label-width="106px">
+                            <el-input
+                                type="textarea"
+                                :rows="4"
+                                v-model="editFormData.beizhu"
+                                placeholder="输入备注内容">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <span slot="footer" class="">
+                <el-button type="primary" @click="dialogEdit = false">保存</el-button>
+                <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
+            </span>
         </el-dialog>
         <Footer></Footer>
     </div>
@@ -301,6 +301,8 @@ export default {
             dialogAddTurn : false,
             dialogEdit : false,
             formData: {
+
+
                 turnOptionID : '2',
                 turnOption : [
                     {id : 1 ,value : '流转类型一'},
@@ -331,7 +333,11 @@ export default {
               
                 fileList : "",
             },
-            formData2 :{
+            
+            editFormData :{
+                address : "新华区明珠花苑北区",
+                common_name : "飞燕",
+                number : "123456",
                 houseCard : 123456456,
                 houseType : [
                     {value : 1, label : '市证'},
@@ -422,11 +428,14 @@ export default {
         },
         /* 编辑房本 */
         editHouseCart(id){
-            this.dialogEdit = true;
+            post('/Index/formNav',{c_id : id}).then(res=>{
+                console.log(res);
+                this.dialogEdit = true;
+            });
         },
         resetForm(formName) {
             this.$refs[formName].resetFields();
-            this.$refs.aaa.updata.clearFiles();
+            // this.$refs.aaa.updata.clearFiles();
         },
         /* 当点击Nav导航单选的时候 */
         navChangeRadioFn(e,v,i){
