@@ -23,7 +23,7 @@
                 <div class="store-box">
                     <div class="agent-box">
                         <div class="img-box">
-                            <el-avatar :size="52" src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                            <el-avatar :size="52" :src="getUserInfo.avatar"></el-avatar>
                         </div>
                         <div class="name-box">
                             <p><span>{{getUserInfo.username}}</span><span>{{getUserInfo.position_name}}</span></p>
@@ -31,8 +31,8 @@
                         </div>
                     </div>
                     <p class="btn-box">
-                        <a href=""><i></i><span>个人信息</span></a>
-                        <a href=""><i></i><span>退出系统</span></a>
+                        <a :href="getUserInfo.detailurl"><i></i><span>个人信息</span></a>
+                        <a :href="getUserInfo.logouturl"><i></i><span>退出系统</span></a>
                     </p>
                 </div>
             </div>            
@@ -206,13 +206,20 @@
                                 i{
                                     display: flex;
                                     .mgr(8px);
-                                    .w(16px);
-                                    .h(16px);
-                                    .bgc(red);
                                 }
                                 &:hover{
                                     text-decoration: underline;
                                 }
+                            }
+                            a:first-child i{
+                                .w(14px);
+                                .h(14px);
+                                .bgi(-37px -16px);
+                            }
+                            a:last-child i{
+                                .w(13px);
+                                .h(15px);
+                                .bgi(-52px -16px);
                             }
                         }
                     }

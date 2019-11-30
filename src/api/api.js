@@ -1,7 +1,7 @@
 import Axios from 'axios'
 import qs from  'qs'
 import Vue from 'vue';
-import { Loading } from 'element-ui';
+import { Loading,Message } from 'element-ui';
 
 
 // axios.defaults.baseURL = 'http://zhaofang.ok.wang/index/index/httprequest';
@@ -30,12 +30,14 @@ export function showFullScreenLoading() {
  }
  needLoadingRequestCount++
 }
-export function tryHideFullScreenLoading() {
- if (needLoadingRequestCount <= 0) return
-    needLoadingRequestCount--
- if (needLoadingRequestCount === 0) {
-    endLoading()
- }
+export function tryHideFullScreenLoading(res) {
+    if(res.errcode != 0 ){Message({message : res.msg,type : res.errcode == 0 ? 'success' : 'error'})};
+    if (needLoadingRequestCount <= 0) return
+        needLoadingRequestCount--
+    if (needLoadingRequestCount === 0) {
+        endLoading();
+        
+    }
 }
 
 
@@ -58,7 +60,7 @@ axios.interceptors.request.use(function (config) {
 //接受响应的一个拦截器
 axios.interceptors.response.use(function (res) {
     // if(res.data.errcode == 4002){window.location.href = res.data.data.url;return false;};
-    tryHideFullScreenLoading();
+    tryHideFullScreenLoading(res.data);
     return res.data
 },function (err) {
     return Promise.reject(err);
@@ -81,3 +83,18 @@ export function post(url, data = {}) {
     })
   })
 }
+/**
+ * get 请求方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function get(url,data = {}){
+    return new Promise((resolve, reject) => {
+        axios.get(url, { params : data}).then(function (res) {
+            resolve(res);
+        }).catch(function (err) {
+            reject(err);
+        });
+    })
+};

@@ -6,28 +6,31 @@
                 <!-- table列表上面的Nav导航 -->
                 <div>
                     <input type="text" v-model="keyword" class="keyword-input" placeholder="输入产权人姓名">
-                    <span class="button dib2">搜索</span>
+                    <span class="button dib2" @click="sreachFn">搜索</span>
                 </div>
-                <div class="nav-box" v-for="(v1,i1) in commonData.navlist" :key="i1">
+                <div class="nav-box" v-for="(v1,i1) in navList" :key="i1">
                     <p class="dib2">{{v1.title}}：</p>
                     <ul class="dib2">
-                        <li v-for="(v2,i2) in v1.item" :key="i2" :id="v2.id" class="dib2" @click="navChangeRadioFn($event,v2,i2)">{{v2.label}}</li>
+                        <li v-for="(v2,i2) in v1.list" :key="i2" :id="v2.id" :class="['dib2','nav_'+v2.id,{'active' : navResultList.some(item=>item.id == v2.id)}]" @click="navChangeRadioFn($event,v2,i2)">{{v2.title}}</li>
                     </ul>
                 </div>
                 <div v-show="navResultList.length > 0" class="nav-result-box">
                     <p>已选：</p>
                     <ul>
-                        <li v-for="(item,index) in navResultList" :key="index" class="dib2">{{item.label}}<span @click="removeNavFn(item)"><i></i></span></li>
+                        <li v-for="(item,index) in navResultList" :key="index" class="dib2">{{item.title || item.owner_name}}<span :class="[item.owner_name ? 'keyAction' : '']" @click="removeNavFn($event,item)"><i></i></span></li>
                         <li class="dib2 last-li" @click="clearNavFn"><i></i>清空已选</li>
+                    </ul>
+                    <ul>
+                        <!-- <li v-for="(item,index) in navResultIdList" :key="index">{{item}}</li> -->
                     </ul>
                 </div>
             </div>
         </div>
         <div class="main">
-            <ListTopArr :num="commonData.total"></ListTopArr>
+            <ListTopArr title="房本列表" :num="tabelData.total"></ListTopArr>
         </div>
         <div class="table-list-box main">
-            <el-table :data="commonData.list" style="width:100%">
+            <el-table :data="tabelData.list" style="width:100%">
                 <el-table-column label="序号" type="index" width="84" align="center"></el-table-column>
                 <el-table-column label="产权人" width="120">
                     <template slot-scope="scope">
@@ -58,14 +61,14 @@
                     <template slot-scope="scope">
                         <div class="dib text-btn" @click="goDetails(scope.row.id)">详情</div>
                         <div class="dib text-btn" @click="editHouseCart(scope.row.id)">编辑</div>
-                        <div class="dib text-btn popover-warp" @mouseout="delQRcode($event)" @mouseover="setQRcode($event,scope.row.id)">
+                        <div class="dib text-btn popover-warp" @mouseover="setQRcode($event,scope.row.id)">
                             二维码
                             <div class="popover-box">
                                 <div class="qrcode-box"></div>
                                 <div class="text-box">
                                     <div>
                                         <p>房本地址：</p>
-                                        <p>新华区新华路239号5-5-102</p>
+                                        <p> {{scope.row.address}}</p>
                                     </div>
                                     <div class="text-btn text-underline">
                                         打印此房本
@@ -80,12 +83,14 @@
                    <ListErrBox></ListErrBox>
                 </div>
             </el-table>
-            <div class="page-box">
+            <div class="page-box" v-show="tabelData.list && tabelData.list.length > 0">
                 <el-pagination
                     background
                     layout="prev, pager, next"
-                    :page-size="10"
-                    :total="commonData.total">
+                    :current-page.sync="page"
+                    @current-change="changePage"
+                    :page-size="2"
+                    :total="tabelData.total">
                 </el-pagination>
             </div>
         </div>
@@ -149,8 +154,8 @@
                     </el-col >
                     <el-col :span="8">
                         <el-form-item label="房产证类型" label-width="106px">
-                            <el-select v-model="editFormData.houseTypeAction">
-                                <el-option v-for="(v,i) in editFormData.houseType" :key="i" :label="v.label" :value="v.value"></el-option>
+                            <el-select v-model="editFormData.property_cert">
+                                <el-option v-for="(v,i) in editFormData.property_cert_list" :key="i" :label="v.label" :value="v.id"></el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -158,35 +163,33 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="产权人" label-width="106px">
-                            <el-input placeholder="输入产权人姓名" v-model="editFormData.name"></el-input>
+                            <el-input placeholder="输入产权人姓名" v-model="editFormData.owner_name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="有无公证书" label-width="106px">
-                            <el-radio v-model="editFormData.houseNotariza" v-for="(v,i) in editFormData.houseNotarizaList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                            <el-radio v-model="editFormData.has_auth" v-for="(v,i) in editFormData.has_auth_list" :key="i" :label="v.id">{{v.label}}</el-radio>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-form-item label="是否共有" label-width="106px">
-                        <el-radio v-model="editFormData.isCommon" v-for="(v,i) in editFormData.isCommonList" :key="i" :label="v.value">{{v.label}}</el-radio>
+                        <el-radio v-model="editFormData.is_common" v-for="(v,i) in editFormData.is_common_list" :key="i" :label="v.id" @change="isCommonFn">{{v.label}}</el-radio>
                     </el-form-item>
                 </el-row>
-                <el-row>
+                <el-row v-show="editFormData.is_common == 1" v-for="(v,i) in editFormData.commonlist" :key="i">
                     <el-col :span="8">
                         <el-form-item label="共有人姓名" label-width="106px">
-                            <el-input v-model="editFormData.commonName" placeholder="输入共有人姓名"></el-input>
+                            <el-input v-model="v.common_name" placeholder="输入共有人姓名"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
                         <el-form-item label="房产证号" label-width="106px">
-                            <el-input v-model="editFormData.houseNum" placeholder="输入房产证号"></el-input>
+                            <el-input v-model="v.common_number" placeholder="输入房产证号"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-form-item label="" label-width="106px"><el-button type="text">+添加共有人</el-button></el-form-item>
-                </el-row>
+                <el-form-item v-show="editFormData.is_common == 1" label="" label-width="106px"><el-button type="text" @click="addCommonFn">+添加共有人</el-button></el-form-item>
                 <el-row>
                     <el-col :span="16">
                         <el-form-item label="房本地址" label-width="106px">
@@ -200,7 +203,7 @@
                             <el-input
                                 type="textarea"
                                 :rows="4"
-                                v-model="editFormData.beizhu"
+                                v-model="editFormData.remarks"
                                 placeholder="输入备注内容">
                             </el-input>
                         </el-form-item>
@@ -208,7 +211,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="">
-                <el-button type="primary" @click="dialogEdit = false">保存</el-button>
+                <el-button type="primary" @click="editHouseCartSub">保存</el-button>
                 <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
             </span>
         </el-dialog>
@@ -223,7 +226,7 @@ import Footer from '../../components/Footer'
 import uploadMultiple from '../../components/upLoadMultiple'
 import { nextTick } from 'q'
 import QRCode from 'qrcodejs2'
-import { post } from '../../api/api.js'
+import { get, post } from '../../api/api.js'
 export default {
     components: {
         ListTopArr,
@@ -233,73 +236,22 @@ export default {
     },
     data() {
         return {
-            commonData : '',
+            //这是真正的数据table数据
+            tabelData : '',
+            //这是navList导航数据
+            navList : [],
+            //这是搜索条见选中的数组列表
             navResultList : [],
+            navResultIdList : [],
+            //这是关键字查询的值
             keyword : '',
-            navList : [
-                {title : '房本类型',list : [{title : '不限',id : 'a0'},{title : '市证',id : 'a1'},{title : '村证',id : 'a2'},{title : '其他',id : 'a3'}]},
-                {title : '业务类型',list : [{title : '不限',id : 'b0'},{title : '买卖成交',id : 'b1'},{title : 'VIP',id : 'b2'},{title : '二手房新出本',id : 'b3'},{title : '抵押贷款',id : 'b4'}]},
-                {title : '房本状态',list : [{title : '不限',id : 'c0'},{title : '录入',id : 'c1'},{title : '收本',id : 'c2'},{title : '业主取走',id : 'c3'}]},
-            ],
-            tableData : [{
-                id : 1,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 2,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 3,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 4,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 5,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 6,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 7,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }, {
-                id : 8,
-                houseCardType : '市证',
-                name: '王新强',
-                type : '业务类型',
-                address : '上海市普陀区金沙江路 1518 弄',
-                status : '录入'
-            }],
+            owner_name : '',//搜索的产权人条件
+            //页码
+            page : 1,
             dialogAddTurn : false,
-            dialogEdit : false,
+            dialogEdit : false, //控制编辑房本弹窗
+
+
             formData: {
 
 
@@ -333,32 +285,19 @@ export default {
               
                 fileList : "",
             },
-            
             editFormData :{
-                address : "新华区明珠花苑北区",
-                common_name : "飞燕",
-                number : "123456",
-                houseCard : 123456456,
-                houseType : [
-                    {value : 1, label : '市证'},
-                    {value : 2, label : '村证'},
-                ],
-                houseTypeAction : 2,
-                name : "刘杨",
-                isCommonList : [
-                    {value : 1,label : "独有"},
-                    {value : 2,label : "共有"},
-                ],
-                isCommon : 2,
-                houseNotarizaList : [
-                    {value : 1,label : "有"},
-                    {value : 2,label : "无"},
-                ],
-                houseNotariza : 2,
-                commonName : "刘杨共有人",
-                houseNum : 123123,
-                houseAddress : "石家庄市平安公园",
-                beizhu : "我是备注信息"
+                cert_id : "", 
+                number : "", //房产证号
+                owner_name : "", //产权人
+                address : "", //房本地址
+                property_cert : "",//房产证类型
+                has_auth : "", //有无公证书
+                is_common : "", //是否共有
+                common_name : "", //共有人姓名
+                remarks : "",//备注
+                property_cert_list : "",//房产证类型列表
+                has_auth_list : "",//有无公证书列表
+                is_common_list : "",//是否共有列表
             },
             options4: [],
             value9: [],
@@ -426,13 +365,44 @@ export default {
                 this.options4 = [];
             }
         },
-        /* 编辑房本 */
+        /* 编辑房本获取数据弹窗 */
         editHouseCart(id){
-            post('/Index/formNav',{c_id : id}).then(res=>{
-                console.log(res);
+            post('/Index/formNav',{cert_id : id,type : 'housecert'}).then(res=>{
+                this.editFormData = res.data;
                 this.dialogEdit = true;
+                console.log(res.data);
             });
         },
+        /* 是否有共有人 */
+        isCommonFn(val){
+            if(val == 0){
+                this.editFormData.commonlist = this.editFormData.commonlist.filter(item => !item.key);
+            }
+        },
+        /* 添加共有人 */
+        addCommonFn(){
+            this.editFormData.commonlist.push({common_name : '',common_number : '',key: true})
+        },
+        addDataFn(arr,oldData) {
+            let newData = {};
+            arr.forEach(item=>newData[item] = oldData[item]);
+            return newData;
+        },
+        /* 提交编辑房本 */
+        editHouseCartSub(){
+            let data = this.addDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],this.editFormData);
+            console.log(data);
+            post('/Index/editHouseCert',data).then(res=>{
+                if(res.errCode == 0){
+                    this.$message({
+                        message : res.msg,
+                        type : 'success'
+                    });
+                }
+                this.dialogEdit = false;
+            });
+        },
+        /* 重置表单 */
         resetForm(formName) {
             this.$refs[formName].resetFields();
             // this.$refs.aaa.updata.clearFiles();
@@ -445,27 +415,64 @@ export default {
             if(that.$hasClass(ele,'active') && i == 0){return false};
             sbi.forEach(item1 => {
                 let id = item1.getAttribute('id');
-                item1.className = 'dib2';
                 that.navResultList = that.navResultList.filter(item2 => item2.id != id);
+                that.navResultIdList = that.navResultIdList.filter(item2 => item2 != id);
             });
             if(i != 0 && that.$hasClass(ele,'active')){
                 that.navResultList = that.navResultList.filter(item2 => item2.id != v.id);
+                that.navResultIdList = that.navResultIdList.filter(item2 => item2 != v.id);
             }else{
                 i != 0 ? that.navResultList.push(v) : null;
+                i != 0 ? that.navResultIdList.push(v.id) : null;
             }
-            ele.className = that.$hasClass(ele,'active') ? 'dib2' : 'dib2 active';
+            this.page = 1;
+            this.getListAjax();
         },
         /* 删除某一项数据 */
-        removeNavFn(v){
+        removeNavFn(e,v){
+            if(this.$hasClass(e.currentTarget,'keyAction')){
+                this.owner_name = '';
+                this.keyword = '';
+            }
             this.navResultList = this.navResultList.filter(item => item.id != v.id);
+            this.navResultIdList = this.navResultIdList.filter(item => item != v.id);
+            this.page = 1;
+            this.getListAjax();
         },
         /* 清除数据 */
         clearNavFn(){
             this.navResultList = [];
+            this.navResultIdList = [];
+            this.owner_name = '';
+            this.keyword = '';
+            this.getListAjax();
+            this.page = 1;
+        },
+        /* 点击搜索功能 */
+        sreachFn(){
+            if(this.keyword == ""){return false;}
+            let ownerData = {};
+            ownerData.flag = 'key';
+            ownerData.id = 'id'+this.keyword;
+            ownerData.owner_name = this.keyword;
+            this.owner_name = this.keyword;
+            if(this.navResultList.length > 0 && this.navResultList[0].flag){
+                this.navResultList[0] = ownerData
+            }else{
+                this.navResultList.unshift(ownerData);
+            }
+            this.page = 1;
+            this.getListAjax();
+        },
+         /* 页码改变的时候 */
+        changePage(curPage){
+            this.page = curPage;
+            this.getListAjax()
         },
         /* 设置二维码 */
         setQRcode(e,id){
             let codeEle = e.currentTarget.querySelector('.qrcode-box');
+            codeEle.innerHTML = "";
             new QRCode(codeEle,{
                 text : '你好啊' + id,
                 width : 100,
@@ -475,9 +482,11 @@ export default {
                 correctLevel: QRCode.CorrectLevel.H
             });
         },
-        /* 移除二维码 */
-        delQRcode(e){
-            e.currentTarget.querySelector('.qrcode-box').innerHTML = "";
+        /* 请求列表 */
+        getListAjax(){
+            get('/Index/lists',{owner_name : this.owner_name,type : this.navResultIdList,page : this.page}).then(res=>{
+                this.tabelData = res.data;
+            });
         },
         /* 上传图片 */
         submit(){
@@ -486,10 +495,10 @@ export default {
         }
     },
     created() {
-        post('/Index/lists/').then(res=>{
-            this.commonData = res.data;
-            this.navList = res.data.navlist
-        })
+        get('/Index/searchNav').then(res=>{
+            this.navList = res.data.navlist;
+        });
+        this.getListAjax()
     },
     mounted() {
         this.list = this.states.map(item => {
@@ -516,7 +525,7 @@ export default {
     .w(100%);
     .bd(1px,solid,@e6);
     .bgc(@white);
-    .minh(400px);
+    .minh(270px);
     .button{
         .w(90px);
         .height(40px);
