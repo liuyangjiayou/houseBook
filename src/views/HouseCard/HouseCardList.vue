@@ -148,12 +148,12 @@
             <el-form ref="dialogAddEdit" v-model="editFormData">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="房产证号" label-width="106px">
+                        <el-form-item label="房产证号" label-width="106px" :rules="editFormDataRules.number">
                             <el-input placeholder="输入房产证编号" v-model="editFormData.number"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
-                        <el-form-item label="房产证类型" label-width="106px">
+                        <el-form-item label="房产证类型" label-width="106px" :rules="editFormDataRules.property_cert">
                             <el-select v-model="editFormData.property_cert">
                                 <el-option v-for="(v,i) in editFormData.property_cert_list" :key="i" :label="v.label" :value="v.id"></el-option>
                             </el-select>
@@ -162,29 +162,29 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="产权人" label-width="106px">
+                        <el-form-item label="产权人" label-width="106px" :rules="editFormDataRules.owner_name">
                             <el-input placeholder="输入产权人姓名" v-model="editFormData.owner_name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="有无公证书" label-width="106px">
+                        <el-form-item label="有无公证书" label-width="106px" :rules="editFormDataRules.has_auth">
                             <el-radio v-model="editFormData.has_auth" v-for="(v,i) in editFormData.has_auth_list" :key="i" :label="v.id">{{v.label}}</el-radio>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-form-item label="是否共有" label-width="106px">
+                    <el-form-item label="是否共有" label-width="106px" :rules="editFormDataRules.is_common">
                         <el-radio v-model="editFormData.is_common" v-for="(v,i) in editFormData.is_common_list" :key="i" :label="v.id" @change="isCommonFn">{{v.label}}</el-radio>
                     </el-form-item>
                 </el-row>
                 <el-row v-show="editFormData.is_common == 1" v-for="(v,i) in editFormData.commonlist" :key="i">
                     <el-col :span="8">
-                        <el-form-item label="共有人姓名" label-width="106px">
+                        <el-form-item label="共有人姓名" label-width="106px" :rules="editFormDataRules.common_name">
                             <el-input v-model="v.common_name" placeholder="输入共有人姓名"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
-                        <el-form-item label="房产证号" label-width="106px">
+                        <el-form-item label="房产证号" label-width="106px" :rules="editFormDataRules.common_number">
                             <el-input v-model="v.common_number" placeholder="输入房产证号"></el-input>
                         </el-form-item>
                     </el-col>
@@ -192,14 +192,14 @@
                 <el-form-item v-show="editFormData.is_common == 1" label="" label-width="106px"><el-button type="text" @click="addCommonFn">+添加共有人</el-button></el-form-item>
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="房本地址" label-width="106px">
+                        <el-form-item label="房本地址" label-width="106px" :rules="editFormDataRules.address">
                             <el-input v-model="editFormData.address" placeholder="输入房本地址"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="备注" label-width="106px">
+                        <el-form-item label="备注" label-width="106px" :rules="editFormDataRules.remarks">
                             <el-input
                                 type="textarea"
                                 :rows="4"
@@ -211,7 +211,7 @@
                 </el-row>
             </el-form>
             <span slot="footer" class="">
-                <el-button type="primary" @click="editHouseCartSub">保存</el-button>
+                <el-button type="primary" @click="editHouseCartSub('dialogAddEdit')">保存</el-button>
                 <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
             </span>
         </el-dialog>
@@ -224,7 +224,7 @@ import ListTopArr from '../../components/ListTopArr'
 import ListErrBox from '../../components/ListErrBox'
 import Footer from '../../components/Footer'
 import uploadMultiple from '../../components/upLoadMultiple'
-import { nextTick } from 'q'
+import { nextTick, Promise } from 'q'
 import QRCode from 'qrcodejs2'
 import { get, post } from '../../api/api.js'
 export default {
@@ -299,6 +299,38 @@ export default {
                 has_auth_list : "",//有无公证书列表
                 is_common_list : "",//是否共有列表
             },
+            editFormDataRules : {
+                cert_id : [
+                    {required : true,message : '缺失房本ID',trigger : 'blur'}
+                ],
+                number : [
+                    {required : true,message : '请填写房产证号',trigger : 'change'}
+                ],
+                owner_name : [
+                    {required : true,message : '请填写产权人',trigger : 'change'}
+                ],
+                address  : [
+                    {required : true,message : '请填写房本地址',trigger : 'change'}
+                ],
+                property_cert : [
+                    {required : true,message : '请选择房产证类型',trigger : 'blur'}
+                ],
+                has_auth : [
+                    {required : true,message : '请填写选择有无公证书',trigger : 'blur'}
+                ],
+                is_common : [
+                    {required : true,message : '请选择是否共有',trigger : 'blur'}
+                ],
+                common_name  : [
+                    {required : true,message : '请填写共有人姓名',trigger : 'blur'}
+                ],
+                remarks : [
+                    {required : true,message : '请填写备注',trigger : 'change'}
+                ]
+            },
+
+
+
             options4: [],
             value9: [],
             list: [],
@@ -389,17 +421,29 @@ export default {
             return newData;
         },
         /* 提交编辑房本 */
-        editHouseCartSub(){
-            let data = this.addDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],this.editFormData);
-            console.log(data);
-            post('/Index/editHouseCert',data).then(res=>{
-                if(res.errCode == 0){
-                    this.$message({
-                        message : res.msg,
-                        type : 'success'
-                    });
+        editHouseCartSub(formName){
+            let that = this;
+            that.submitForm(formName,function(){
+            let data = that.addDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],that.editFormData);
+                post('/Index/editHouseCert',data).then(res=>{
+                    if(res.errCode == 0){
+                        that.$message({
+                            message : res.msg,
+                            type : 'success'
+                        });
+                    }
+                    that.dialogEdit = false;
+                });
+            })
+        },
+         submitForm(formName,sub,err) {
+            this.$refs[formName].validate((valid) => {
+               if (valid) {
+                    sub()
+                } else {
+                    err(err)
+                    return false;
                 }
-                this.dialogEdit = false;
             });
         },
         /* 重置表单 */
