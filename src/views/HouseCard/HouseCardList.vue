@@ -145,7 +145,7 @@
         </el-dialog>
         <!-- 编辑房本 -->
         <el-dialog class="dialog-footer-center" title="编辑房本" :visible.sync="dialogEdit" width="874px">
-            <el-form ref="dialogAddEdit" v-model="editFormData">
+            <el-form ref="dialogAddEdit" :model="editFormData">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="房产证号" label-width="106px" :rules="editFormDataRules.number">

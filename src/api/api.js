@@ -36,7 +36,6 @@ export function tryHideFullScreenLoading(res) {
         needLoadingRequestCount--
     if (needLoadingRequestCount === 0) {
         endLoading();
-        
     }
 }
 
@@ -48,7 +47,7 @@ axios.interceptors.request.use(function (config) {
         'Content-Type':'application/x-www-form-urlencoded', //设置跨域头部'
     };
   //url 路径传参
-  showFullScreenLoading();
+//   showFullScreenLoading();
   return config
 },function (err) {
   return Promise.reject(err);

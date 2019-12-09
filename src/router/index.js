@@ -9,6 +9,14 @@ const routes = [
         redirect : '/home'
     },
     {
+        path : '/test',
+        name : 'test',
+        component: () => import( '../views/test/formRules.vue'),
+        meta : {
+            title : '我的测试'
+        },
+    },
+    {
         path : '/home',
         name : 'home',
         component: Home,
