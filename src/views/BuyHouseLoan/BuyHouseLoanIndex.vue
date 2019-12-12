@@ -6,7 +6,7 @@
             <Breadcrumb></Breadcrumb>
         </div>
         <div class="main">
-            购房贷款页面
+            <router-view></router-view>
         </div>
     </div>
 </template>

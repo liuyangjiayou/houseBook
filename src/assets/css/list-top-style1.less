@@ -1,0 +1,31 @@
+@import './common.less';
+.sreach-box{
+    position: relative;
+    box-sizing: border-box;
+    .mgt(42px);
+    .pd(29px 19px 0);
+    .w(100%);
+    .bgc(@white); 
+    .tag-list{
+        position: absolute;
+        top: -42px;
+        left: -1px;
+        box-sizing: border-box;
+        .height(40px);
+        li{
+            float: left;
+            .mgr(8px);
+            .pd(0 39px);
+            .bgc(@f7);
+            .bd(1px,solid,@e6);
+            .c(@blue);
+            cursor: pointer;
+        }
+    }
+    .input1{
+        .w(190px)
+    }
+    .input2{
+        .w(160px)
+    }
+}

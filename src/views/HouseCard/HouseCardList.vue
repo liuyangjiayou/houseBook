@@ -561,8 +561,7 @@ export default {
 </script>
 <style lang='less' scoped>
 @import url('../../assets/css/common.less');
-.table-list-box{.mgb(46px);.pdb(37px);.bgc(@white)}
-.page-box{.pdt(37px);text-align: center;}
+
 .nav-wrap{
     box-sizing: border-box;
     .pd(20px);

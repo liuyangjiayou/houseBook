@@ -6,7 +6,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         path : '/',
-        redirect : '/home'
+        redirect : '/buyHouseLoan'
     },
     {
         path : '/test',
@@ -33,6 +33,10 @@ const routes = [
         },
         children : [
             {
+                path : '/buyHouseLoan',
+                redirect : '/buyHouseLoan/route'
+            },
+            {
                 path : '/buyHouseLoan/wait',
                 name : 'buyHouseLoan-wait',
                 component : () => import('../views/BuyHouseLoan/BuyHouseWaitSingle.vue'),
@@ -55,7 +59,7 @@ const routes = [
                 meta : {
                     title : '在途单',
                 }
-            }
+            },
         ]
     },
     {
