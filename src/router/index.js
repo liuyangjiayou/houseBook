@@ -34,7 +34,7 @@ const routes = [
         children : [
             {
                 path : '/buyHouseLoan',
-                redirect : '/buyHouseLoan/route'
+                redirect : '/buyHouseLoan/routeDetails'
             },
             {
                 path : '/buyHouseLoan/wait',
@@ -51,6 +51,14 @@ const routes = [
                 meta : {
                     title : '在途单',
                 }
+            },
+            {
+                path : '/buyHouseLoan/routeDetails',
+                name : 'buyHouseLoan-routeDetails',
+                component : () => import('../views/BuyHouseLoan/BuyHouseRouteDetails.vue'),
+                meta : {
+                    title : '在途单详情',
+                }  
             },
             {
                 path : '/buyHouseLoan/route',

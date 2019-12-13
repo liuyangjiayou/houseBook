@@ -115,16 +115,16 @@ body{
 .bdr(@n){
     border-radius: @n;
 }
-.bd(@n,@s,@c){
+.bd(@n:1px,@s:solid,@c:@ceb){
     border: @n @s @c
 }
 .bdn(){
     border: none;
 }
-.bdbx(@n,@s,@c){
+.bdbx(@n:1px,@s:solid,@c:@ceb){
     border-bottom: @n @s @c
 }
-.bdlx(@n,@s,@c){
+.bdlx(@n:1px,@s:solid,@c:@ceb){
     border-left: @n @s @c
 }
 .bdc(@n){
@@ -149,9 +149,19 @@ input:focus{
     .c(@blue);
     cursor: pointer;
 }
+/* 鼠标hover出现下划线 */
+.text-btn_hover:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
 /* 带下划线的文字 */
 .text-underline{
     text-decoration: underline;
+}
+/* 不可点击的文字文件 */
+.text-dis{
+    .c(@c999);
+    cursor: not-allowed;
 }
 /* 行内块级元素 */
 .ibvm(){
@@ -187,3 +197,8 @@ input:focus{
 .page-box{.pdt(37px);text-align: center;}
 /* table表单的容器样式 */
 .table-list-box{.mgb(46px);.pdb(37px);.bgc(@white)}
+
+/* 电话icon图 */
+.icon-phone{
+    // .bgi()
+}

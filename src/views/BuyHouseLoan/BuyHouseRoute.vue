@@ -1,11 +1,12 @@
 <template>
     <div>
+        <!-- 在途单 -->
         <div class="main">
             <el-form class="sreach-box">
                 <ul class="tag-list">
-                    <li>待收单</li>
-                    <li>在途单</li>
-                    <li>结件单</li>
+                    <router-link tag="li" to="/buyHouseLoan/wait" active-class="active">待收单</router-link>
+                    <router-link tag="li" to="/buyHouseLoan/route" active-class="active">在途单</router-link>
+                    <router-link tag="li" to="/buyHouseLoan/route" active-class="active">结件单</router-link>
                 </ul>
                 <el-row>
                     <el-col :span="6">
@@ -98,16 +99,54 @@
             <ListTopArr title="待收单列表" num="25"></ListTopArr>
         </div>
         <div class="main table-list-box">
-            <el-table width="100%">
+            <el-table width="100%" :data="tabelData.list">
                 <el-table-column label="序号" type="index" align="center" width="60"></el-table-column>
-                <el-table-column label="合同编号" align="center" width="90"></el-table-column>
-                <el-table-column label="买方" align="left" width="130"></el-table-column>
-                <el-table-column label="卖方" align="left" width="130"></el-table-column>
-                <el-table-column label="报单人" align="left" width="160"></el-table-column>
-                <el-table-column label="小区名称" align="left" width="230"></el-table-column>
-                <el-table-column label="类型" align="left" width="110"></el-table-column>
-                <el-table-column label="报单日期" align="left" width="110"></el-table-column>
-                <el-table-column label="操作" align="center" ></el-table-column>
+                <el-table-column label="合同编号" align="center" width="90">
+                    <template slot-scope="scope">
+                        {{scope.row.number}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="买方" align="left" width="130">
+                    <template slot-scope="scope">
+                        {{scope.row.agent1}}<br/>
+                        {{scope.row.agent1_phone}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="卖方" align="left" width="130">
+                    <template slot-scope="scope">
+                        {{scope.row.agent2}}<br/>
+                        {{scope.row.agent2_phone}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="报单人" align="left" width="160">
+                    <template slot-scope="scope">
+                        {{scope.row.agent3}}<br/>
+                        {{scope.row.agent3_phone}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="小区名称" align="left" width="210">
+                    <template slot-scope="scope">
+                        {{scope.row.houseName}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="进度" align="left" width="110">
+                    <template slot-scope="scope">
+                        {{scope.row.type}}
+                    </template>
+                </el-table-column>
+                <el-table-column label="报单日期" align="left" width="130">
+                    <template slot-scope="scope">
+                        <p>{{scope.row.date}}</p>
+                        <p class="cgreen">报单时长：4天</p>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" align="center" >
+                    <template slot-scope="scope">
+                        <div>
+                            <span class="dib text-btn">详情</span>
+                        </div>
+                    </template>
+                </el-table-column>
                 <div slot="empty">
                    <ListErrBox></ListErrBox>
                 </div>
@@ -129,17 +168,70 @@
 <script>
 import ListTopArr from '../../components/ListTopArr'
 import ListErrBox from '../../components/ListErrBox'
+import upload from '../../components/Upload/index'
 export default {
     components: {
         ListTopArr,
-        ListErrBox
+        ListErrBox,
+        upload
     },
     data() {
         return {
             page : 2,
-            tabelData : {
-                total : 1000
-            }
+             tabelData : {
+                total : 1000,
+                list : [
+                    {
+                        number : 1805366,
+                        agent1 : '刘涛',
+                        agent1_phone : '17367729551',
+                        agent2 : '王柯',
+                        agent2_phone : '17367729551',
+                        agent3 : '王名',
+                        agent3_phone : '17367729551',
+                        houseName : '西里小区1-1-1',
+                        type : '购房贷款',
+                        date : '2018-11-7',
+                    },
+                    {
+                        number : 1805366,
+                        agent1 : '刘涛',
+                        agent1_phone : '17367729551',
+                        agent2 : '王柯',
+                        agent2_phone : '17367729551',
+                        agent3 : '王名',
+                        agent3_phone : '17367729551',
+                        houseName : '西里小区1-1-1',
+                        type : '购房贷款',
+                        date : '2018-11-7',
+                    },
+                    {
+                        number : 1805366,
+                        agent1 : '刘涛',
+                        agent1_phone : '17367729551',
+                        agent2 : '王柯',
+                        agent2_phone : '17367729551',
+                        agent3 : '王名',
+                        agent3_phone : '17367729551',
+                        houseName : '西里小区1-1-1',
+                        type : '购房贷款',
+                        date : '2018-11-7',
+                    },
+                      {
+                        number : 1805366,
+                        agent1 : '刘涛',
+                        agent1_phone : '17367729551',
+                        agent2 : '王柯',
+                        agent2_phone : '17367729551',
+                        agent3 : '王名',
+                        agent3_phone : '17367729551',
+                        houseName : '西里小区1-1-1',
+                        type : '购房贷款',
+                        date : '2018-11-7',
+                    }
+                ]
+            },
+            value1 : ''
         };
     },
     computed: {},
