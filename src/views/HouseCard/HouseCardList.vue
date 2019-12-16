@@ -148,12 +148,12 @@
             <el-form ref="dialogAddEdit" :model="editFormData">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="房产证号" label-width="106px" :rules="editFormDataRules.number">
+                        <el-form-item :show-message="false" label="房产证号" label-width="106px" prop="number" :rules="editFormDataRules.number">
                             <el-input placeholder="输入房产证编号" v-model="editFormData.number"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
-                        <el-form-item label="房产证类型" label-width="106px" :rules="editFormDataRules.property_cert">
+                        <el-form-item label="房产证类型" label-width="106px" prop="property_cert" :rules="editFormDataRules.property_cert">
                             <el-select v-model="editFormData.property_cert">
                                 <el-option v-for="(v,i) in editFormData.property_cert_list" :key="i" :label="v.label" :value="v.id"></el-option>
                             </el-select>
@@ -162,29 +162,29 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="产权人" label-width="106px" :rules="editFormDataRules.owner_name">
+                        <el-form-item label="产权人" label-width="106px" prop="owner_name" :rules="editFormDataRules.owner_name">
                             <el-input placeholder="输入产权人姓名" v-model="editFormData.owner_name"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="有无公证书" label-width="106px" :rules="editFormDataRules.has_auth">
+                        <el-form-item label="有无公证书" label-width="106px" prop="has_auth" :rules="editFormDataRules.has_auth">
                             <el-radio v-model="editFormData.has_auth" v-for="(v,i) in editFormData.has_auth_list" :key="i" :label="v.id">{{v.label}}</el-radio>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-form-item label="是否共有" label-width="106px" :rules="editFormDataRules.is_common">
+                    <el-form-item label="是否共有" label-width="106px" prop="is_common" :rules="editFormDataRules.is_common">
                         <el-radio v-model="editFormData.is_common" v-for="(v,i) in editFormData.is_common_list" :key="i" :label="v.id" @change="isCommonFn">{{v.label}}</el-radio>
                     </el-form-item>
                 </el-row>
                 <el-row v-show="editFormData.is_common == 1" v-for="(v,i) in editFormData.commonlist" :key="i">
                     <el-col :span="8">
-                        <el-form-item label="共有人姓名" label-width="106px" :rules="editFormDataRules.common_name">
+                        <el-form-item label="共有人姓名" label-width="106px" prop="common_name" :rules="editFormDataRules.common_name">
                             <el-input v-model="v.common_name" placeholder="输入共有人姓名"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
-                        <el-form-item label="房产证号" label-width="106px" :rules="editFormDataRules.common_number">
+                        <el-form-item label="房产证号" label-width="106px" prop="common_number" :rules="editFormDataRules.common_number">
                             <el-input v-model="v.common_number" placeholder="输入房产证号"></el-input>
                         </el-form-item>
                     </el-col>
@@ -192,14 +192,14 @@
                 <el-form-item v-show="editFormData.is_common == 1" label="" label-width="106px"><el-button type="text" @click="addCommonFn">+添加共有人</el-button></el-form-item>
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="房本地址" label-width="106px" :rules="editFormDataRules.address">
+                        <el-form-item label="房本地址" label-width="106px" prop="address" :rules="editFormDataRules.address">
                             <el-input v-model="editFormData.address" placeholder="输入房本地址"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="备注" label-width="106px" :rules="editFormDataRules.remarks">
+                        <el-form-item label="备注" label-width="106px" prop="remarks" :rules="editFormDataRules.remarks">
                             <el-input
                                 type="textarea"
                                 :rows="4"
@@ -325,7 +325,8 @@ export default {
                     {required : true,message : '请填写共有人姓名',trigger : 'blur'}
                 ],
                 remarks : [
-                    {required : true,message : '请填写备注',trigger : 'change'}
+                    {required : true,message : '请填写备注',trigger : 'change'},
+                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' },
                 ]
             },
 
@@ -434,14 +435,20 @@ export default {
                     }
                     that.dialogEdit = false;
                 });
+            },function(errArr){
+                console.log(errArr[0].validateMessage);
             })
         },
-         submitForm(formName,sub,err) {
+        submitForm(formName,sub,err) {
             this.$refs[formName].validate((valid) => {
+                console.log(valid);
                if (valid) {
                     sub()
                 } else {
-                    err(err)
+                    let errArr = this.$refs[formName].fields.filter((item)=>{
+                        return item.validateState != 'success'
+                    })
+                    err(errArr)
                     return false;
                 }
             });
