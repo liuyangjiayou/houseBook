@@ -96,41 +96,41 @@
         </div>
         <!-- 添加流转记录弹窗 -->
         <el-dialog class="dialog-footer-center" title="添加流转记录" :visible.sync="dialogAddTurn" width="720px">
-            <el-form label-width="108px" :rules="rules" ref="dialogAddTurn" :model="formData">
-                <el-form-item label="流转类型" prop="turnID">
-                    <el-select style="width: 418px" v-model="formData.turnID" placeholder="选择流转类型">
-                        <el-option v-for="(item,index) in formData.turnOption" :key="index" :label="item.label" :value="item.value"></el-option>
+            <el-form label-width="108px" ref="dialogAddTurn" :model="formData">
+                <el-form-item label="流转类型" prop="status" :rules="formDataRules.status">
+                    <el-select style="width: 418px" v-model="formData.status" placeholder="选择流转类型">
+                        <el-option v-for="(v,i) in formData.status_list" :key="i" :label="v.label" :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="收本原因" prop="cause">
-                    <el-select style="width: 418px" v-model="formData.cause" placeholder="选择收本原因">
-                        <el-option v-for="(item,index) in formData.causeList" :key="index" :label="item.label" :value="item.value"></el-option>
+                <el-form-item label="收本原因" prop="reason" :rules="formDataRules.reason">
+                    <el-select style="width: 418px" v-model="formData.reason" placeholder="选择收本原因">
+                        <el-option v-for="(v,i) in formData.reason_list" :key="i" :label="v.label" :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="系统号" prop="value9">
+                <el-form-item label="系统号" prop="user_id" :rules="formDataRules.user_id">
                     <el-select
                         style="width: 418px" 
-                        v-model="formData.value9"
+                        v-model="formData.user_id"
                         filterable
                         remote
                         placeholder="请输入关键词"
                         :remote-method="remoteMethod"
                         :loading="loading">
                         <el-option
-                            v-for="(item,index) in options4"
+                            v-for="(item,index) in user_list"
                             :key="index"
                             :label="item.name"
                             :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="备注" prop="textarea">
+                <el-form-item label="备注" prop="remarks" :rules="formDataRules.remarks">
                     <el-input
                         style="width: 418px"
                         type="textarea"
                         :rows="3"
                         placeholder="请输备注"
-                        v-model="formData.textarea">
+                        v-model="formData.remarks">
                     </el-input>
                 </el-form-item>
                 <el-form-item label="收本凭证">
@@ -139,7 +139,7 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="">
-                <el-button type="primary" @click="submit()">保存</el-button>
+                <el-button type="primary" @click="submit('dialogAddTurn')">保存</el-button>
                 <el-button @click="()=>{this.dialogAddTurn = false;this.resetForm('dialogAddTurn')}">取消</el-button>
             </span>
         </el-dialog>
@@ -151,7 +151,7 @@
                         <el-form-item :show-message="false" label="房产证号" label-width="106px" prop="number" :rules="editFormDataRules.number">
                             <el-input placeholder="输入房产证编号" v-model="editFormData.number"></el-input>
                         </el-form-item>
-                    </el-col >
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="房产证类型" label-width="106px" prop="property_cert" :rules="editFormDataRules.property_cert">
                             <el-select v-model="editFormData.property_cert">
@@ -179,12 +179,12 @@
                 </el-row>
                 <el-row v-show="editFormData.is_common == 1" v-for="(v,i) in editFormData.commonlist" :key="i">
                     <el-col :span="8">
-                        <el-form-item label="共有人姓名" label-width="106px" prop="common_name" :rules="editFormDataRules.common_name">
+                        <el-form-item label="共有人姓名" label-width="106px" :prop="'commonlist.'+i+'.common_name'" :rules="editFormDataRules.common_name">
                             <el-input v-model="v.common_name" placeholder="输入共有人姓名"></el-input>
                         </el-form-item>
                     </el-col >
                     <el-col :span="8">
-                        <el-form-item label="房产证号" label-width="106px" prop="common_number" :rules="editFormDataRules.common_number">
+                        <el-form-item label="房产证号" label-width="106px">
                             <el-input v-model="v.common_number" placeholder="输入房产证号"></el-input>
                         </el-form-item>
                     </el-col>
@@ -251,40 +251,34 @@ export default {
             dialogAddTurn : false,
             dialogEdit : false, //控制编辑房本弹窗
 
-
+            //添加流转记录
             formData: {
-
-
-                turnOptionID : '2',
-                turnOption : [
-                    {id : 1 ,value : '流转类型一'},
-                    {value : 2 ,label : '流转类型二'},
-                    {value : 3 ,label : '流转类型三'},
-                    {value : 4 ,label : '流转类型四'},
-                    {value : 5 ,label : '流转类型五'},
-                ],
-
-                causeIKD : '2',
-                causeList : [
-                    {value : 1 ,label : '收本原因一'},
-                    {value : 2 ,label : '收本原因二'},
-                    {value : 3 ,label : '收本原因三'},
-                    {value : 4 ,label : '收本原因四'},
-                    {value : 5 ,label : '收本原因五'},
-                ],
-                value9 : [],
-                region: '',
-                region2: '',
-                date1: '',
-                date2: '',
-                delivery: false,
-                type: [],
-                resource: '',
-                desc: '',
-                textarea : "",
-              
-                fileList : "",
+                cert_id : '', //房本id
+                status : '', //流转类型
+                status_list : '', //流转类型列表
+                reason : '', //收本原因
+                reason_list : '', //收本原因列表
+                user_id : '' , //系统号/用户id
+                dept_id	: '', //用户id所属部门id
+                remarks	: '', //备注
+                image	: '' , //收本凭证，多张图片用,隔开
             },
+            formDataRules : {
+                status: [
+                    { required: true, message: '请选择流转类型', trigger: 'change' }
+                ],
+                reason: [
+                    { required: true, message: '请选择收本原因', trigger: 'change' }
+                ],
+                user_id :[
+                    {required : true, message : '请选择系统号', trigger: 'change'}
+                ],
+                remarks: [
+                    {required : true, message : '请填写备注信息', trigger: 'blur'}
+                ],
+            },
+            user_list: [],
+            //编辑房本
             editFormData :{
                 cert_id : "", 
                 number : "", //房产证号
@@ -304,70 +298,30 @@ export default {
                     {required : true,message : '缺失房本ID',trigger : 'blur'}
                 ],
                 number : [
-                    {required : true,message : '请填写房产证号',trigger : 'change'}
+                    {required : true,message : '请填写房产证号',trigger : 'blur'}
                 ],
                 owner_name : [
-                    {required : true,message : '请填写产权人',trigger : 'change'}
+                    {required : true,message : '请填写产权人',trigger : 'blur'}
                 ],
                 address  : [
-                    {required : true,message : '请填写房本地址',trigger : 'change'}
+                    {required : true,message : '请填写房本地址',trigger : 'blur'}
                 ],
                 property_cert : [
-                    {required : true,message : '请选择房产证类型',trigger : 'blur'}
+                    {required : true,message : '请选择房产证类型',trigger : 'change'}
                 ],
                 has_auth : [
                     {required : true,message : '请填写选择有无公证书',trigger : 'blur'}
                 ],
                 is_common : [
-                    {required : true,message : '请选择是否共有',trigger : 'blur'}
+                    {required : true,message : '请选择是否共有',trigger : 'change'}
                 ],
                 common_name  : [
                     {required : true,message : '请填写共有人姓名',trigger : 'blur'}
                 ],
                 remarks : [
-                    {required : true,message : '请填写备注',trigger : 'change'},
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' },
+                    {required : true,message : '请填写备注',trigger : 'change'}
                 ]
             },
-
-
-
-            options4: [],
-            value9: [],
-            list: [],
-            loading: false,
-            states: ["Alabama", "Alaska", "Arizona",
-            "Arkansas", "California", "Colorado",
-            "Connecticut", "Delaware", "Florida",
-            "Georgia", "Hawaii", "Idaho", "Illinois",
-            "Indiana", "Iowa", "Kansas", "Kentucky",
-            "Louisiana", "Maine", "Maryland",
-            "Massachusetts", "Michigan", "Minnesota",
-            "Mississippi", "Missouri", "Montana",
-            "Nebraska", "Nevada", "New Hampshire",
-            "New Jersey", "New Mexico", "New York",
-            "North Carolina", "North Dakota", "Ohio",
-            "Oklahoma", "Oregon", "Pennsylvania",
-            "Rhode Island", "South Carolina",
-            "South Dakota", "Tennessee", "Texas",
-            "Utah", "Vermont", "Virginia",
-            "Washington", "West Virginia", "Wisconsin",
-            "Wyoming"],
-
-            rules : {
-                turnID: [
-                    { required: true, message: '请选择流转类型', trigger: 'change' }
-                ],
-                cause: [
-                    { required: true, message: '请选择收本原因', trigger: 'change' }
-                ],
-                value9 :[
-                    {required : true, message : '请选择系统号', trigger: 'blur'}
-                ],
-                textarea: [
-                    {required : true, message : '请填写备注信息', trigger: 'blur'}
-                ],
-            }
         };
     },
     computed: {},
@@ -376,8 +330,12 @@ export default {
         goDetails(id){
             this.$router.push({ path: '/houseCard/details',query : {cid : id}});
         },
+        /* 添加流转记录 */
         addTurn(id){
-            this.dialogAddTurn = true;
+            post('/Index/formNav',{cert_id : id,type : 'transfer'}).then(res=>{
+                this.formData = res.data
+                this.dialogAddTurn = true;
+            });         
         },
         /* 系统号搜索 */
         remoteMethod(query) {
@@ -385,17 +343,10 @@ export default {
             this.loading = true;
                 post('/User/getAgentInfo',{val : query}).then(res=>{
                     this.loading = false;
-                    this.options4 = res.data.list;
+                    this.user_list = res.data.list;
                 })
-                // setTimeout(() => {
-                //     this.loading = false;
-                //     this.options4 = this.list.filter(item => {
-                //     return item.label.toLowerCase()
-                //         .indexOf(query.toLowerCase()) > -1;
-                //     });
-                // }, 200);
             } else {
-                this.options4 = [];
+                this.user_list = [];
             }
         },
         /* 编辑房本获取数据弹窗 */
@@ -427,13 +378,14 @@ export default {
             that.submitForm(formName,function(){
             let data = that.addDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],that.editFormData);
                 post('/Index/editHouseCert',data).then(res=>{
-                    if(res.errCode == 0){
+                    if(res.errcode == 0){
                         that.$message({
                             message : res.msg,
                             type : 'success'
                         });
+                        that.dialogEdit = false;
                     }
-                    that.dialogEdit = false;
+                    
                 });
             },function(errArr){
                 console.log(errArr[0].validateMessage);
@@ -540,9 +492,23 @@ export default {
             });
         },
         /* 上传图片 */
-        submit(){
-            this.$refs.aaa.submit();
-            this.dialogAddTurn = false;
+        submit(formName){
+            let that = this;
+            that.submitForm(formName,function(){
+            let data = that.addDataFn(['cert_id','status','reason','user_id','dept_id','remarks','image'],that.formData);
+                post('/Index/editHouseCert',data).then(res=>{
+                    if(res.errcode == 0){
+                        that.$message({
+                            message : res.msg,
+                            type : 'success'
+                        });
+                        that.dialogEdit = false;
+                    }
+                    
+                });
+            },function(errArr){
+                console.log(errArr[0].validateMessage);
+            })
         }
     },
     created() {
