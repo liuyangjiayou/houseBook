@@ -278,6 +278,7 @@ export default {
                 ],
             },
             user_list: [],
+            loading : false,
             //编辑房本
             editFormData :{
                 cert_id : "", 
@@ -517,11 +518,7 @@ export default {
         });
         this.getListAjax()
     },
-    mounted() {
-        this.list = this.states.map(item => {
-            return { value: item, label: item };
-        });
-        
+    mounted() {    
     },
     beforeCreate() {},
     beforeMount() {},
