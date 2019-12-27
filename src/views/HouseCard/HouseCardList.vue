@@ -95,7 +95,7 @@
             </div>
         </div>
         <!-- 添加流转记录弹窗 -->
-        <el-dialog class="dialog-footer-center" title="添加流转记录" :visible.sync="dialogAddTurn" width="720px">
+        <el-dialog class="dialog-footer-center" @close="()=>{this.yjResetForm(['dialogAddTurn']);this.yjResetUpload(['upload'])}" title="添加流转记录" :visible.sync="dialogAddTurn" width="720px">
             <el-form label-width="108px" ref="dialogAddTurn" :model="formData">
                 <el-form-item label="流转类型" prop="status" :rules="formDataRules.status">
                     <el-select style="width: 418px" v-model="formData.status" placeholder="选择流转类型">
@@ -107,6 +107,7 @@
                         <el-option v-for="(v,i) in formData.reason_list" :key="i" :label="v.label" :value="v.id"></el-option>
                     </el-select>
                 </el-form-item>
+
                 <el-form-item label="系统号" prop="user_id" :rules="formDataRules.user_id">
                     <el-select
                         style="width: 418px" 
@@ -123,6 +124,7 @@
                             :value="item.id">
                         </el-option>
                     </el-select>
+                    <el-input v-show="false" v-model="formData.dept_id"></el-input>
                 </el-form-item>
                 <el-form-item label="备注" prop="remarks" :rules="formDataRules.remarks">
                     <el-input
@@ -133,18 +135,19 @@
                         v-model="formData.remarks">
                     </el-input>
                 </el-form-item>
-                <el-form-item label="收本凭证">
-                    <uploadMultiple ref="aaa"></uploadMultiple>
-                    <el-input type="hidden" v-model="formData.fileList"></el-input>
+                <el-form-item label="收本凭证" prop="image">
+                    <uploadMultiple ref='upload' :imageId.sync="formData.image" @uploadSucFn="uploadSucFn"></uploadMultiple>
+                    <el-input v-show="false" v-model="formData.image"></el-input>
                 </el-form-item>
+                <!-- v-if="formData.status == 3" -->
             </el-form>
             <span slot="footer" class="">
                 <el-button type="primary" @click="submit('dialogAddTurn')">保存</el-button>
-                <el-button @click="()=>{this.dialogAddTurn = false;this.resetForm('dialogAddTurn')}">取消</el-button>
+                <el-button @click="()=>{this.dialogAddTurn = false}">取消</el-button>
             </span>
         </el-dialog>
         <!-- 编辑房本 -->
-        <el-dialog class="dialog-footer-center" title="编辑房本" :visible.sync="dialogEdit" width="874px">
+        <el-dialog class="dialog-footer-center" @close="()=>{this.yjResetForm(['dialogAddEdit'])}" title="编辑房本" :visible.sync="dialogEdit" width="874px">
             <el-form ref="dialogAddEdit" :model="editFormData">
                 <el-row>
                     <el-col :span="8">
@@ -199,7 +202,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="备注" label-width="106px" prop="remarks" :rules="editFormDataRules.remarks">
+                        <el-form-item label="备注" label-width="106px">
                             <el-input
                                 type="textarea"
                                 :rows="4"
@@ -212,7 +215,7 @@
             </el-form>
             <span slot="footer" class="">
                 <el-button type="primary" @click="editHouseCartSub('dialogAddEdit')">保存</el-button>
-                <el-button @click="()=>{this.dialogEdit = false;this.resetForm('dialogAddEdit')}">取消</el-button>
+                <el-button @click="()=>{this.dialogEdit = false}">取消</el-button>
             </span>
         </el-dialog>
         <Footer></Footer>
@@ -220,6 +223,7 @@
 </template>
 
 <script>
+import upload from '../../components/Upload/index'
 import ListTopArr from '../../components/ListTopArr'
 import ListErrBox from '../../components/ListErrBox'
 import Footer from '../../components/Footer'
@@ -232,7 +236,8 @@ export default {
         ListTopArr,
         Footer,
         ListErrBox,
-        uploadMultiple
+        uploadMultiple,
+        upload
     },
     data() {
         return {
@@ -261,7 +266,7 @@ export default {
                 user_id : '' , //系统号/用户id
                 dept_id	: '', //用户id所属部门id
                 remarks	: '', //备注
-                image	: '' , //收本凭证，多张图片用,隔开
+                image : '' , //收本凭证，多张图片用,隔开
             },
             formDataRules : {
                 status: [
@@ -273,9 +278,9 @@ export default {
                 user_id :[
                     {required : true, message : '请选择系统号', trigger: 'change'}
                 ],
-                remarks: [
-                    {required : true, message : '请填写备注信息', trigger: 'blur'}
-                ],
+                image : [
+                    {required : true, message : '请选择图片', trigger: 'change'}
+                ]
             },
             user_list: [],
             loading : false,
@@ -326,15 +331,21 @@ export default {
         };
     },
     computed: {},
-    watch: {},
+    watch: {
+        
+    },
     methods: {
+        /* 去详情 */
         goDetails(id){
+            console.log(213123);
             this.$router.push({ path: '/houseCard/details',query : {cid : id}});
         },
-        /* 添加流转记录 */
+
+
+        /* 添加流转记录获取数据 */
         addTurn(id){
             post('/Index/formNav',{cert_id : id,type : 'transfer'}).then(res=>{
-                this.formData = res.data
+                this.formData = res.data;
                 this.dialogAddTurn = true;
             });         
         },
@@ -350,6 +361,35 @@ export default {
                 this.user_list = [];
             }
         },
+        /* 添加流转记录带图片的时候 */
+        submit(formName){
+            if(this.formData.status == 3){
+                this.$refs.upload.submitUpload()
+            }else{
+                this.uploadSucFn()
+            }
+          
+        },
+        uploadSucFn(){
+            let that = this;
+            that.yjSubmitForm('dialogAddTurn',function(){
+                let data = that.yjAddDataFn(['cert_id','status','reason','user_id','dept_id','remarks','image'],that.formData);
+                    post('/Index/addHouseTransfer',data).then(res=>{
+                    if(res.errcode == 0){
+                        that.$message({
+                            message : res.msg,
+                            type : 'success'
+                        });
+                        that.dialogAddTurn = false;
+                        that.getListAjax();
+                    }
+                });
+            },function(errArr){
+                console.log(errArr[0].validateMessage);
+            })
+        },
+
+
         /* 编辑房本获取数据弹窗 */
         editHouseCart(id){
             post('/Index/formNav',{cert_id : id,type : 'housecert'}).then(res=>{
@@ -368,16 +408,11 @@ export default {
         addCommonFn(){
             this.editFormData.commonlist.push({common_name : '',common_number : '',key: true})
         },
-        addDataFn(arr,oldData) {
-            let newData = {};
-            arr.forEach(item=>newData[item] = oldData[item]);
-            return newData;
-        },
         /* 提交编辑房本 */
         editHouseCartSub(formName){
             let that = this;
-            that.submitForm(formName,function(){
-            let data = that.addDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],that.editFormData);
+            that.yjSubmitForm(formName,function(){
+            let data = that.yjAddDataFn(['cert_id','number','owner_name','address','property_cert','has_auth','is_common','common_name','remarks'],that.editFormData);
                 post('/Index/editHouseCert',data).then(res=>{
                     if(res.errcode == 0){
                         that.$message({
@@ -392,25 +427,9 @@ export default {
                 console.log(errArr[0].validateMessage);
             })
         },
-        submitForm(formName,sub,err) {
-            this.$refs[formName].validate((valid) => {
-                console.log(valid);
-               if (valid) {
-                    sub()
-                } else {
-                    let errArr = this.$refs[formName].fields.filter((item)=>{
-                        return item.validateState != 'success'
-                    })
-                    err(errArr)
-                    return false;
-                }
-            });
-        },
-        /* 重置表单 */
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-            // this.$refs.aaa.updata.clearFiles();
-        },
+
+
+
         /* 当点击Nav导航单选的时候 */
         navChangeRadioFn(e,v,i){
             let that = this;
@@ -473,6 +492,8 @@ export default {
             this.page = curPage;
             this.getListAjax()
         },
+
+
         /* 设置二维码 */
         setQRcode(e,id){
             let codeEle = e.currentTarget.querySelector('.qrcode-box');
@@ -492,25 +513,10 @@ export default {
                 this.tabelData = res.data;
             });
         },
-        /* 上传图片 */
-        submit(formName){
-            let that = this;
-            that.submitForm(formName,function(){
-            let data = that.addDataFn(['cert_id','status','reason','user_id','dept_id','remarks','image'],that.formData);
-                post('/Index/editHouseCert',data).then(res=>{
-                    if(res.errcode == 0){
-                        that.$message({
-                            message : res.msg,
-                            type : 'success'
-                        });
-                        that.dialogEdit = false;
-                    }
-                    
-                });
-            },function(errArr){
-                console.log(errArr[0].validateMessage);
-            })
-        }
+
+
+
+        
     },
     created() {
         get('/Index/searchNav').then(res=>{
@@ -518,7 +524,7 @@ export default {
         });
         this.getListAjax()
     },
-    mounted() {    
+    mounted() {
     },
     beforeCreate() {},
     beforeMount() {},

@@ -36,6 +36,7 @@ export default {
     box-sizing: border-box;
     .pdt(17px);
     .w(100%);
+    .minw(1200px);
     .h(80px);
     .bgc(@c555);
     p{

@@ -83,6 +83,7 @@
     .header{
         .h(52px);
         .bgc(@green);
+        .minw(1200px);
         .main-box{
             position: relative;
             box-sizing: border-box;

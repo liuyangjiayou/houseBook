@@ -1,5 +1,16 @@
 <template>
 <div>
+
+
+
+    <el-tabs v-model="activeName">
+        <el-tab-pane v-for="(v,i) in tabsArr" :key="i" :label="v.item"  :name="v.id">
+            <tab :title="v.item"></tab>
+        </el-tab-pane>
+    </el-tabs>
+
+
+
    <el-dialog class="dialog-footer-center" title="编辑房本" :visible.sync="dialogEdit" width="874px">
         <el-form ref="dialogAddEdit" :model="editFormData">
             <el-row>
@@ -21,17 +32,38 @@
 </template>
 
 <script>
-
+    import tab from './tab1.vue'
   export default {
     name:'',
     props:[''],
     data () {
       return {
+        activeName : '2',
+        tabsArr : [
+            {
+                item : "苹果",
+                id : '1'
+            },
+            {
+                item : "香蕉",
+                id : '2'
+            },
+            {
+                item : "橘子",
+                id : '3'
+            },
+            {
+                item : "葡萄",
+                id : '4'
+            },
+        ],
+
+
           aaa : '',
           test : [{
               value : "",
           }],
-        dialogEdit : true,
+        dialogEdit : false,
         editFormData :{
             cert_id : "", 
             number : "", //房产证号
@@ -78,7 +110,7 @@
       };
     },
 
-    components: {},
+    components: {tab},
 
     computed: {},
 

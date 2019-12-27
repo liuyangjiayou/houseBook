@@ -2,10 +2,12 @@ module.exports = {
     lintOnSave : false,
     productionSourceMap:false,
     publicPath: process.env.NODE_ENV === 'production' ? 'dist/' : '/',
+    outputDir : "./../dist",
     devServer: {
+        host : "tss.erp.com",
         proxy: {
             '/api': {
-                target: 'http://ts.local.esez.cn:8080',
+                target: 'http://ts.erp.com/',
                 changeOrigin: true
             }
         }

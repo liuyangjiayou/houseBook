@@ -7,7 +7,7 @@ import { Loading,Message } from 'element-ui';
 // axios.defaults.baseURL = 'http://zhaofang.ok.wang/index/index/httprequest';
 // axios.defaults.baseURL = "https://newhr.t.ok.wang/api"
 let axios = Axios.create({
-    baseURL : 'http://localhost:8080/api'
+    baseURL : '/api'
 })
 let loadIndex;
 function startLoading() {
@@ -20,9 +20,6 @@ function startLoading() {
 function endLoading() {
     loadIndex.close();
 }
-
-
-
 let needLoadingRequestCount = 0;
 export function showFullScreenLoading() {
  if (needLoadingRequestCount === 0) {
@@ -47,7 +44,7 @@ axios.interceptors.request.use(function (config) {
         'Content-Type':'application/x-www-form-urlencoded', //设置跨域头部'
     };
   //url 路径传参
-  showFullScreenLoading();
+//   showFullScreenLoading();
   return config
 },function (err) {
   return Promise.reject(err);
@@ -58,7 +55,7 @@ axios.interceptors.request.use(function (config) {
 
 //接受响应的一个拦截器
 axios.interceptors.response.use(function (res) {
-    // if(res.data.errcode == 4002){window.location.href = res.data.data.url;return false;};
+    if(res.data.errcode == 4002){window.location.href = res.data.data.url;return false;};
     tryHideFullScreenLoading(res.data);
     return res.data
 },function (err) {
@@ -72,7 +69,7 @@ axios.interceptors.response.use(function (res) {
  * @param data
  * @returns {Promise}
  */
-export function post(url, data = {}) {
+export function post(url,data = {}) {
   return new Promise((resolve, reject) => {
     axios.post(url, qs.stringify(data))
       .then(res => {
@@ -82,6 +79,28 @@ export function post(url, data = {}) {
     })
   })
 }
+/*上传图片的方法*/
+export function post2(url,data = {},params) {
+    return new Promise((resolve, reject) => {
+        axios.post(url,data,params)
+        .then(res => {
+            resolve(res);
+        }, err => {
+            reject(err);
+        })
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
 /**
  * get 请求方法
  * @param url

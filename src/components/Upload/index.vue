@@ -42,13 +42,14 @@
 </template>
 <script>
 import Cropper from './cropper'
+import { post2 } from '../../api/api.js'
 export default {
   name: 'uploader',
   props: {
     targetUrl: {
       // 上传地址
       type: String,
-      default: '/Uploadimg'
+      default: 'http://localhost:8080/api/Upload/uploader'
     },
     multiple: {
       // 多图开关
@@ -189,9 +190,9 @@ export default {
         this.$refs.uploading.style.display = 'block'
       }
       let formData = new FormData()
-      formData.append('attachment', data)
+      formData.append('file', data)
       console.log(formData)
-      this.$http.post(this.targetUrl, formData).then(res => {
+      post2(this.targetUrl, formData).then(res => {
         if (!this.multiple) {
           // 上传完成后隐藏正在上传
           this.$refs.uploading.style.display = 'none'

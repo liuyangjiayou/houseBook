@@ -60,7 +60,7 @@
                         </el-timeline-item>
                     </el-timeline> -->
                 <ul>
-                    <li v-for="(v,i) in commonData.transinfo" :key="i">
+                    <li v-for="(v,i) in commonData.transinfo" :key="i" :class="[{'no-before' : commonData.transinfo.length == 1}]">
                         <div class="cicon"></div>
                         <div class="dib2 vtat img-box"><el-avatar :size="50" :src="v.avatar"></el-avatar></div>
                         <div class="dib2 vtat">
@@ -131,7 +131,7 @@
                     </li> -->
                 </ul>
             </div>
-            <ListErrBox v-if="commonData.transinfo && commonData.transinfo.length > 0"></ListErrBox>
+            <ListErrBox v-if="commonData.transinfo && commonData.transinfo.length <= 0"></ListErrBox>
         </div>
     </div>
     <Footer></Footer>
@@ -159,20 +159,20 @@ import { post } from '../../api/api'
    
     beforeMount() {},
     created(){
-        let houseId = this.$route.query.cid;
+         let houseId = this.$route.query.cid;
         post('/Index/detailInfo',{cid : houseId}).then(res => {
             this.commonData = res.data;
             console.log(this.commonData);
         });
+        
     },
     mounted() {
-        
+      
     },
 
     methods: {},
 
     watch: {}
-
   }
 
 </script>
@@ -227,7 +227,7 @@ import { post } from '../../api/api'
       strong{
         .mgr(15px);
       }
-    }
+    } 
   }
   li:first-child .cicon::before{
     position: absolute;
@@ -237,7 +237,7 @@ import { post } from '../../api/api'
     content: "";
     .w(10px);
     .h(20px);
-  }
+    }
    li:last-child .cicon::before{
     position: absolute;
     bottom: -100px;
@@ -246,7 +246,10 @@ import { post } from '../../api/api'
     content: "";
     .w(10px);
     .h(100px);
-  }
+    }
+    li.no-before .cicon::before{
+        .h(20px);
+    }  
 }
 h6{
   .height(60px);

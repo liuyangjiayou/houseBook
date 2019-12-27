@@ -6,9 +6,7 @@
             <Breadcrumb></Breadcrumb>
         </div>
         <div class="mian">
-            <keep-alive>
-                <router-view></router-view>
-            </keep-alive>
+            <router-view></router-view>
         </div>
   </div>
 </template>
